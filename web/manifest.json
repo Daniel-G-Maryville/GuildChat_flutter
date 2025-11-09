@@ -1,6 +1,6 @@
 {
-    "name": "myapp",
-    "short_name": "myapp",
+    "name": "guild_chat",
+    "short_name": "guild_chat",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

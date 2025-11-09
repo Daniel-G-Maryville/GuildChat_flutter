@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
-import 'test.dart';
+import 'package:guild_chat/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const GuildChat());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class GuildChat extends StatelessWidget {
+  const GuildChat({super.key});
 
   // This widget is the root of your application.
   @override
@@ -64,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      FirestoreClient().addUser('test', 'test');
+      // FirestoreClient().addUser('test', 'test');
       _counter++;
     });
   }

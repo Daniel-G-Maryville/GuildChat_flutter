@@ -119,7 +119,7 @@ void main() {
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(),
-      child: const MyApp(),
+      child: const GuildChat(),
     ),
   );
 }
@@ -141,8 +141,8 @@ class ThemeProvider with ChangeNotifier {
   }
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class GuildChat extends StatelessWidget {
+  const GuildChat({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -406,8 +406,8 @@ final GoRouter _router = GoRouter(
 
 // In your MaterialApp or CupertinoApp
 /*
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class GuildChat extends StatelessWidget {
+  const GuildChat({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -627,7 +627,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(GuildChat());
 }
 ```
 
