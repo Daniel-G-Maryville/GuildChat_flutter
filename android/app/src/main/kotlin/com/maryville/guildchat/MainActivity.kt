@@ -1,4 +1,4 @@
-package com.example.myapp
+package com.maryville.guildchat
 
 import io.flutter.embedding.android.FlutterActivity
 
