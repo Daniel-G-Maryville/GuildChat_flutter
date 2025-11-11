@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:guild_chat/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:guild_chat/data_helpers.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -70,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      // FirestoreClient().addUser('test', 'test');
+      DataHelpers().addUser('test', 'test');
       _counter++;
     });
   }
