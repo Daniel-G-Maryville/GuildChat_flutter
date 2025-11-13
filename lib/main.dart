@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:guild_chat/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:guild_chat/data_helpers.dart';
+import 'package:guild_chat/db_helpers/user.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const GuildChat());
 }
 
@@ -53,7 +51,7 @@ class MyHomePage extends StatefulWidget {
   // This class is the configuration for the state. It holds the values (in this
   // case the title) provided by the parent (in this case the App widget) and
   // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final"  
+  // always marked "final"
 
   final String title;
 
@@ -63,16 +61,25 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  final _maxLen = 10;
 
-  void _incrementCounter() {
+  Future<void> _setCounter() async {
+    List<User> users = await User().getAllUsers();
+    if (users.length >= _maxLen) {
+      var i = 0;
+      while (i < _maxLen) {
+        var user = users.removeLast();
+        user.delete();
+        debugPrint('id ${user.id}');
+        i++;
+      }
+    } else {
+      User().addUser('test');
+      users = await User().getAllUsers();
+    }
+
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      DataHelpers().addUser('test', 'test');
-      _counter++;
+      _counter = users.length;
     });
   }
 
@@ -122,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: _setCounter,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
