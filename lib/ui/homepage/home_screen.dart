@@ -16,5 +16,5 @@ class HomeScreen extends StatefulWidget {
   final String title;
 
   @override
-  State<HomeScreen> createState() => HomePageViewmodel();
+  State<HomeScreen> createState() => HomeViewmodel();
 }

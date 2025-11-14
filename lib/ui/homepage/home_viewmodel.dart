@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:guild_chat/models/user.dart';
 import 'package:guild_chat/ui/homepage/home_screen.dart';
 
-class HomePageViewmodel extends State<HomeScreen> {
+class HomeViewmodel extends State<HomeScreen> {
   int _userCount = 0;
   final _maxLen = 10;
 
