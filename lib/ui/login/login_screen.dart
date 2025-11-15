@@ -13,14 +13,13 @@ class LoginScreen extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _handleController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authNotifierProvider);
 
     // Auto-navigate on success
-    if (authState.user != null && authState.handle != null) {
+    if (authState.user != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           context.push('/user');
@@ -55,36 +54,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   style: const TextStyle(color: Colors.red),
                 ),
               ),
-            ElevatedButton(
-              onPressed: authState.isLoading
-                  ? null
-                  : () => ref
-                        .read(authNotifierProvider.notifier)
-                        .login(
-                          _emailController.text.trim(),
-                          _passwordController.text,
-                        ),
-              child: const Text('Login'),
-            ),
-            if (authState.user != null && authState.handle == null) ...[
-              const SizedBox(height: 20),
-              const Text('Create Profile'),
-              TextField(
-                controller: _handleController,
-                decoration: const InputDecoration(
-                  labelText: 'Username (e.g., @paulo)',
-                  prefixText: '@',
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: authState.isLoading
+                      ? null
+                      : () => ref
+                            .read(authNotifierProvider.notifier),
+                  child: const Text('Login'),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: authState.isLoading
-                    ? null
-                    : () => ref
-                          .read(authNotifierProvider.notifier)
-                          .createHandle(_handleController.text.trim()),
-                child: const Text('Create'),
-              ),
-            ],
+                ElevatedButton(
+                  onPressed: authState.isLoading
+                      ? null
+                      : () => ref
+                            .read(authNotifierProvider.notifier),
+                  child: const Text('Create Account'),
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -95,7 +82,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    _handleController.dispose();
     super.dispose();
   }
 }
