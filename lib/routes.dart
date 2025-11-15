@@ -1,7 +1,8 @@
 import 'package:go_router/go_router.dart';
-import 'ui/homepage/home_screen.dart';
-import 'package:guild_chat/ui/homepage/better_home_screen.dart';
-import 'package:guild_chat/ui/homepage/better_home_viewmodel.dart';
+import 'package:guild_chat/ui/homepage/home_screen.dart';
+import 'package:guild_chat/ui/homepage/home_viewmodel.dart';
+import 'package:guild_chat/ui/user/user_screen.dart';
+import 'package:guild_chat/ui/user/user_viewmodel.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: '/home',
@@ -10,11 +11,12 @@ final GoRouter router = GoRouter(
     // GoRoute(path: '/user', builder: (context, state) => UserScreen()),
     GoRoute(
       path: '/home',
-      builder: (context, state) => HomeScreen(title: 'Guild Chat'),
+      builder: (context, state) => HomeScreen(title: 'Guild Chat', viewModel: HomeViewmodel()),
     ),
     GoRoute(
-      path: '/betterhome',
-      builder: (context, state) => BetterHomeScreen(title: 'Guild Chat', viewModel: BetterHomeViewmodel()),
+      path: '/user',
+      builder: (context, state) =>
+          UserScreen(title: 'Guild Chat', viewModel: UserViewmodel()),
     ),
   ],
   // Optional: Redirect for auth
