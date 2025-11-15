@@ -63,29 +63,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       horizontal: 16.0,
                       vertical: 8.0,
                     ),
-                    child: Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 30,
-                          child: Icon(Icons.group, size: 30),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () {
-                              // Replace with actual navigation, e.g., context.go('/guild/$guildName');
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Go to "$guildName" page')),
-                              );
-                            },
-                            child: Text(
-                              guildName,
-                              textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.headlineSmall,
-                            ),
-                          ),
-                        ),
-                      ],
+                    child: ListTile(
+                      leading: const CircleAvatar(
+                        radius: 30,
+                        child: Icon(Icons.group, size: 30),
+                      ),
+                      title: Text(
+                        guildName,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      onTap: () {
+                        // Replace with actual navigation, e.g., context.go('/guild/$guildName');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Go to "$guildName" page')),
+                        );
+                      },
                     ),
                   );
                 }).toList(),
