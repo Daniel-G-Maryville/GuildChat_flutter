@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 class HomeViewmodel extends ChangeNotifier {
   // A mock list of guilds the user is a part of.
   // Later, this would be fetched from your database.
-  List<String> _userGuilds = [
+  final List<String> _userGuilds = [
     'The Flutter Wizards',
     'Dart Demons',
     'The State Managers',
