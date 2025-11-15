@@ -3,12 +3,12 @@ import 'package:guild_chat/models/user.dart';
 
 class UserViewmodel extends ChangeNotifier {
   int _userCount = 0;
-  final _maxLen = 10;
+  final int _maxLen = 10;
 
   int get userCount => _userCount;
 
   UserViewmodel() {
-    _loadUsers(); // Uncomment to auto-load users on init
+    _loadUsers();
   }
 
   Future<void> _loadUsers() async {
