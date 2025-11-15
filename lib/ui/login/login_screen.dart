@@ -22,13 +22,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (authState.user != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          context.push('/user');
+          context.go('/home');
         }
       });
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: const Text('Guild Chat Login')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -60,14 +60,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   onPressed: authState.isLoading
                       ? null
                       : () => ref
-                            .read(authNotifierProvider.notifier),
+                        .read(authNotifierProvider.notifier)
+                        .login(_emailController.text, _passwordController.text),
                   child: const Text('Login'),
                 ),
                 ElevatedButton(
                   onPressed: authState.isLoading
                       ? null
                       : () => ref
-                            .read(authNotifierProvider.notifier),
+                        .read(authNotifierProvider.notifier)
+                        .create(_emailController.text, _passwordController.text),
                   child: const Text('Create Account'),
                 ),
               ],
