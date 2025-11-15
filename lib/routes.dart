@@ -3,13 +3,14 @@ import 'package:guild_chat/ui/homepage/home_screen.dart';
 import 'package:guild_chat/ui/homepage/home_viewmodel.dart';
 import 'package:guild_chat/ui/user/user_screen.dart';
 import 'package:guild_chat/ui/user/user_viewmodel.dart';
+import 'package:guild_chat/ui/login/login_screen.dart';
 
 final String title = 'Guild Chat';
 
 final GoRouter router = GoRouter(
-  initialLocation: '/home',
+  initialLocation: '/login',
   routes: [
-    // GoRoute(path: '/login', builder: (context, state) => LoginScreen()),
+    GoRoute(path: '/login', builder: (context, state) => LoginScreen()),
     // GoRoute(path: '/user', builder: (context, state) => UserScreen()),
     GoRoute(
       path: '/home',
