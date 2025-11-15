@@ -4,7 +4,7 @@ import 'package:guild_chat/ui/homepage/better_home_screen.dart';
 import 'package:guild_chat/ui/homepage/better_home_viewmodel.dart';
 
 final GoRouter router = GoRouter(
-  initialLocation: '/betterhome',
+  initialLocation: '/home',
   routes: [
     // GoRoute(path: '/login', builder: (context, state) => LoginScreen()),
     // GoRoute(path: '/user', builder: (context, state) => UserScreen()),
