@@ -19,7 +19,6 @@ class _CreateUserState extends ConsumerState<CreateUserScreen> {
     final emailController = TextEditingController(text: email as String);
     final usernameController = TextEditingController();
 
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,

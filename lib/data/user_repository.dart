@@ -33,7 +33,12 @@ class UserRepository {
   }
 
   // Create a new user in Firestore (using email as document ID)
-  static Future<User?> create(String email, String username, {String firstName = '', String lastName = ''}) async {
+  static Future<User?> create({
+    String email = '', 
+    String username = '',
+    String firstName = '',
+    String lastName = ''
+  }) async {
     try {
       final newUser = User(
         username: username,
