@@ -20,9 +20,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     // Auto-navigate on success
     if (authState.user != null) {
+      debugPrint('Is new user? $authState.isNewUser');
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          context.go('/home');
+          if (authState.isNewUser) {
+            context.go('/user/create');
+          } else {
+            context.go('/home');
+          }
         }
       });
     }
@@ -60,16 +65,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   onPressed: authState.isLoading
                       ? null
                       : () => ref
-                        .read(authNotifierProvider.notifier)
-                        .login(_emailController.text, _passwordController.text),
+                            .read(authNotifierProvider.notifier)
+                            .login(
+                              _emailController.text,
+                              _passwordController.text,
+                            ),
                   child: const Text('Login'),
                 ),
                 ElevatedButton(
                   onPressed: authState.isLoading
                       ? null
                       : () => ref
-                        .read(authNotifierProvider.notifier)
-                        .create(_emailController.text, _passwordController.text),
+                            .read(authNotifierProvider.notifier)
+                            .create(
+                              _emailController.text,
+                              _passwordController.text,
+                            ),
                   child: const Text('Create Account'),
                 ),
               ],

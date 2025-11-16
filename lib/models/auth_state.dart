@@ -4,22 +4,21 @@ class AuthState {
   final firebase.User? user;
   final bool isLoading;
   final String? error;
+  final bool isNewUser;
 
   const AuthState({
     this.user,
     this.isLoading = false,
     this.error,
+    this.isNewUser = false,
   });
 
-  AuthState copyWith({
-    firebase.User? user,
-    bool? isLoading,
-    String? error,
-  }) {
+  AuthState copyWith({firebase.User? user, bool? isLoading, String? error, bool? isNewUser}) {
     return AuthState(
       user: user ?? this.user,
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
+      isNewUser: isNewUser ?? this.isNewUser,
     );
   }
 }

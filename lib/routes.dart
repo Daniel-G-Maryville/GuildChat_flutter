@@ -4,6 +4,7 @@ import 'package:guild_chat/ui/homepage/home_viewmodel.dart';
 import 'package:guild_chat/ui/user/user_screen.dart';
 import 'package:guild_chat/ui/user/user_viewmodel.dart';
 import 'package:guild_chat/ui/login/login_screen.dart';
+import 'package:guild_chat/ui/user/create_user_screen.dart';
 
 final String title = 'Guild Chat';
 
@@ -21,6 +22,10 @@ final GoRouter router = GoRouter(
       path: '/user',
       builder: (context, state) =>
           UserScreen(title: title, viewModel: UserViewmodel()),
+    ),
+    GoRoute(
+      path: '/user/create',
+      builder: (context, state) => CreateUserScreen(),
     ),
   ],
   // Optional: Redirect for auth

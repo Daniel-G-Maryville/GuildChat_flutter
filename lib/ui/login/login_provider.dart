@@ -40,7 +40,7 @@ class AuthNotifier extends Notifier<AuthState> {
     state = state.copyWith(isLoading: true, error: null);
     try {
       final cred = await _service.create(email, password);
-      state = state.copyWith(user: cred.user, isLoading: false);
+      state = state.copyWith(user: cred.user, isLoading: false, isNewUser: true);
     } on FirebaseAuthException catch (e) {
       state = state.copyWith(error: e.message, isLoading: false);
     } catch (e) {
