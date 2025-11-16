@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart'; // For debugPrint if needed, but not used here
-
 class User {
   final String username;
   final String email;
