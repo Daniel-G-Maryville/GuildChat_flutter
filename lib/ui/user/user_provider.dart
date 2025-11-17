@@ -7,7 +7,7 @@ import 'package:guild_chat/ui/login/login_provider.dart'; // For authNotifierPro
 final userByEmailProvider = FutureProvider.autoDispose<User?>((ref) async {
   final email = ref.watch(authEmailProvider).value;
 
-  return await UserRepository.getUserByEmail(email as String); // Await here
+  return await UserRepository.getUserByEmail(email!); // Await here
 });
 
 final authEmailProvider = FutureProvider.autoDispose<String?>((ref) async {
@@ -50,6 +50,8 @@ class UserNotifier extends Notifier<DataState<User>> {
       state = DataState<User>.error(e.toString());
     }
   }
+
+  void clearError() => state = DataState.initalize();
 }
 
 final userNotifierProvider = NotifierProvider<UserNotifier, DataState<User>>(

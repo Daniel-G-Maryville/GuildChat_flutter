@@ -10,12 +10,13 @@ Future<void> main() async {
   runApp(ProviderScope(child: GuildChat()));
 }
 
-class GuildChat extends StatelessWidget {
+class GuildChat extends ConsumerWidget {
   const GuildChat({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
     return MaterialApp.router(routerConfig: router);
   }
 }

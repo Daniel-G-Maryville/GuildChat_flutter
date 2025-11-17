@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:guild_chat/ui/user/user_provider.dart';
 
@@ -11,13 +12,24 @@ class CreateUserScreen extends ConsumerStatefulWidget {
 
 class _CreateUserState extends ConsumerState<CreateUserScreen> {
   final _title = 'Create User Profile';
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final email = ref.watch(authEmailProvider).value;
-    final firstNameController = TextEditingController();
-    final lastNameController = TextEditingController();
-    final emailController = TextEditingController(text: email as String);
-    final usernameController = TextEditingController();
+    final userState = ref.watch(userNotifierProvider);
+    _emailController.text = email!;
+
+    if (userState.data != null) {
+      WidgetsBinding.instance.addPersistentFrameCallback((_) {
+        if (mounted) {
+          context.go('/home');
+        }
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -31,38 +43,57 @@ class _CreateUserState extends ConsumerState<CreateUserScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
-              controller: emailController,
+              controller: _emailController,
               decoration: const InputDecoration(labelText: 'Email'),
               enabled: false,
             ),
             TextField(
-              controller: usernameController,
+              controller: _usernameController,
               decoration: const InputDecoration(labelText: 'Username'),
             ),
             TextField(
-              controller: firstNameController,
+              controller: _firstNameController,
               decoration: const InputDecoration(labelText: 'First Name'),
             ),
             TextField(
-              controller: lastNameController,
+              controller: _lastNameController,
               decoration: const InputDecoration(labelText: 'Last Name'),
             ),
+            const SizedBox(height: 20),
+            if (userState.isLoading) const CircularProgressIndicator(),
+            if (userState.error != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  userState.error!,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
             ElevatedButton(
-              onPressed: usernameController.text == ''
+              onPressed: _usernameController.text == ''
                   ? null // Set error
-                  : null, // call create
-                  // () => ref
-                  //       .create(
-                  //         _emailController.text,
-                  //         _usernameController.text,
-                  //         _firstNameController.text,
-                  //         _lastNameController.text,
-                  //       ),
+                  : () => ref
+                        .read(userNotifierProvider.notifier)
+                        .create(
+                          email: email, // use a guarnteed value
+                          username: _usernameController.text,
+                          firstName: _firstNameController.text,
+                          lastName: _lastNameController.text,
+                        ),
               child: const Text('Submit'),
             ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _usernameController.dispose();
+    _emailController.dispose();
+    super.dispose();
   }
 }
