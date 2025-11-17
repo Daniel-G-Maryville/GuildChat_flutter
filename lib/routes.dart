@@ -17,11 +17,16 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (authState.isLoading) return null;
       final isLoggedIn = authState.user != null;
       final isOnLogin = state.matchedLocation == '/login';
+      final isOnCreateUser = state.matchedLocation == '/user/create';
 
       if (!isLoggedIn && !isOnLogin) return '/login';
+      if (isLoggedIn && authState.isNewUser && !isOnCreateUser) {
+        return '/user/create';
+      }
       if (isLoggedIn && isOnLogin) return '/home';
       return null;
     },
+    initialLocation: '/home',
     routes: [
       GoRoute(path: '/login', builder: (context, state) => LoginScreen()),
       // GoRoute(path: '/user', builder: (context, state) => UserScreen()),

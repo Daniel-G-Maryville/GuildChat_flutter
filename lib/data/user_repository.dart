@@ -44,7 +44,7 @@ class UserRepository {
         username: username,
         firstName: firstName,
         lastName: lastName,
-        email: email,
+        email: email.toLowerCase().trim(),
       );
       await db.collection('users').doc(email).set(newUser.toMap());
       return newUser;

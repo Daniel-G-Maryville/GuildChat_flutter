@@ -18,6 +18,14 @@ class _CreateUserState extends ConsumerState<CreateUserScreen> {
   final _emailController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _usernameController.addListener(() {
+      setState(() {}); // Triggers rebuild as user types
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final email = ref.watch(authEmailProvider).value;
     final userState = ref.watch(userNotifierProvider);
@@ -71,7 +79,7 @@ class _CreateUserState extends ConsumerState<CreateUserScreen> {
               ),
             ElevatedButton(
               onPressed: _usernameController.text == ''
-                  ? null // Set error
+                  ? null
                   : () => ref
                         .read(userNotifierProvider.notifier)
                         .create(

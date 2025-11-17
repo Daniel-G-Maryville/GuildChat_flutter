@@ -20,7 +20,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     // Auto-navigate on success
     if (authState.user != null) {
-      // debugPrint('Is new user? $authState.isNewUser');
+      debugPrint('Is new user? $authState.isNewUser');
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           if (authState.isNewUser) {

@@ -1,5 +1,4 @@
 class User {
-  final String id;
   final String username;
   final String email;
   final String firstName;
@@ -7,7 +6,6 @@ class User {
 
   // Constructor for creating a new User
   User({
-    this.id = '',
     this.username = '',
     this.firstName = '',
     this.lastName = '',
@@ -17,7 +15,6 @@ class User {
   // Factory constructor to create User from Firestore document
   factory User.fromMap(Map<String, dynamic> map, String id) {
     return User(
-      id: map['id'],
       username: map['username'],
       firstName: map['firstName'],
       lastName: map['lastName'],
@@ -28,7 +25,6 @@ class User {
   // Convert User to a map for Firestore
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'username': username,
       'firstName': firstName,
       'lastName': lastName,
