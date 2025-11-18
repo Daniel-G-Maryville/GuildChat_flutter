@@ -80,14 +80,15 @@ class _CreateUserState extends ConsumerState<CreateUserScreen> {
             ElevatedButton(
               onPressed: _usernameController.text == ''
                   ? null
-                  : () => ref
-                        .read(userNotifierProvider.notifier)
-                        .create(
-                          email: email, // use a guarnteed value
-                          username: _usernameController.text,
-                          firstName: _firstNameController.text,
-                          lastName: _lastNameController.text,
-                        ),
+                  : () => 
+                    ref
+                    .read(userNotifierProvider.notifier)
+                    .create(
+                      email: email, // use a guarnteed value
+                      username: _usernameController.text,
+                      firstName: _firstNameController.text,
+                      lastName: _lastNameController.text,
+                    ),
               child: const Text('Submit'),
             ),
           ],

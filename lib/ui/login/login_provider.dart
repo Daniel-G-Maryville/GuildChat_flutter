@@ -13,6 +13,7 @@ class AuthService{
   Future<UserCredential> create(String email, String password) async {
     return await _auth.createUserWithEmailAndPassword(email: email, password: password);
   }
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
 }
 
 // ViewModel (now using Notifier)
@@ -24,15 +25,13 @@ class AuthNotifier extends Notifier<AuthState> {
     return const AuthState();  // Initial state here
   }
 
-  Future<void> login(String email, String password) async {
+  Future<void> signIn(String email, String password) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final cred = await _service.signIn(email, password);
-      state = state.copyWith(user: cred.user, isLoading: false);
-    } on FirebaseAuthException catch (e) {
-      state = state.copyWith(error: e.message, isLoading: false);
+      await _service.signIn(email, password);
+      state = state.copyWith(isLoading: false);
     } catch (e) {
-      state = state.copyWith(error: 'An unexpected error occurred', isLoading: false);
+      state = state.copyWith(error: e.toString(), isLoading: false);
     }
   }
 
@@ -40,17 +39,27 @@ class AuthNotifier extends Notifier<AuthState> {
     state = state.copyWith(isLoading: true, error: null);
     try {
       final cred = await _service.create(email, password);
-      state = state.copyWith(user: cred.user, isLoading: false, isNewUser: true);
-    } on FirebaseAuthException catch (e) {
-      state = state.copyWith(error: e.message, isLoading: false);
+      state = state.copyWith(isLoading: false, user: cred.user, isNewUser: true);
     } catch (e) {
-      state = state.copyWith(error: 'An unexpected error occurred', isLoading: false);
+      state = state.copyWith(error: e.toString(), isLoading: false);
     }
   }
-
   void clearError() => state = state.copyWith(error: null);
 }
 
 // Providers
+final authStateProvider = StreamProvider<AuthState>((ref) {
+  final authService = ref.watch(authServiceProvider); // Assume you have a provider for AuthService
+
+  return authService.authStateChanges.map((user) {
+    if (user == null) {
+      return AuthState();
+    } else {
+      return AuthState(user: user);
+    }
+  }).handleError((error) {
+    return AuthState(error: error.toString());
+  });
+});
 final authServiceProvider = Provider<AuthService>((ref) => AuthService());
 final authNotifierProvider = NotifierProvider<AuthNotifier, AuthState>(() => AuthNotifier());
