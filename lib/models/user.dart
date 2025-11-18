@@ -6,10 +6,10 @@ class User {
 
   // Constructor for creating a new User
   User({
-    this.username = "none",
+    this.username = '',
     this.firstName = '',
     this.lastName = '',
-    this.email = 'a@a.com',
+    this.email = '',
   });
 
   // Factory constructor to create User from Firestore document

@@ -18,20 +18,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authNotifierProvider);
 
-    // Auto-navigate on success
-    if (authState.user != null) {
-      debugPrint('Is new user? $authState.isNewUser');
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          if (authState.isNewUser) {
-            context.go('/user/create');
-          } else {
-            context.go('/home');
-          }
-        }
-      });
-    }
-
     return Scaffold(
       appBar: AppBar(title: const Text('Guild Chat Login')),
       body: Padding(
@@ -66,7 +52,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ? null
                       : () => ref
                             .read(authNotifierProvider.notifier)
-                            .login(
+                            .signIn(
                               _emailController.text,
                               _passwordController.text,
                             ),
@@ -75,12 +61,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ElevatedButton(
                   onPressed: authState.isLoading
                       ? null
-                      : () => ref
-                            .read(authNotifierProvider.notifier)
-                            .create(
-                              _emailController.text,
-                              _passwordController.text,
-                            ),
+                      : ()  {
+                        ref
+                        .read(authNotifierProvider.notifier)
+                        .create(
+                          _emailController.text,
+                          _passwordController.text,
+                        );
+                      },
                   child: const Text('Create Account'),
                 ),
               ],

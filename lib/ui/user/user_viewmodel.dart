@@ -29,7 +29,7 @@ class UserViewmodel extends ChangeNotifier {
         i++;
       }
     } else {
-      UserRepository.create('a@a.edu', 'atool');
+      UserRepository.create(email: 'a@a.com', username: 'user');
       users = await UserRepository.getAllUsers();
     }
 
