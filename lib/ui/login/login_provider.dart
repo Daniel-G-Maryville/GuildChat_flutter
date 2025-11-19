@@ -28,8 +28,8 @@ class AuthNotifier extends Notifier<AuthState> {
   Future<void> signIn(String email, String password) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      await _service.signIn(email, password);
-      state = state.copyWith(isLoading: false);
+      final cred = await _service.signIn(email, password);
+      state = state.copyWith(user: cred.user);
     } catch (e) {
       state = state.copyWith(error: e.toString(), isLoading: false);
     }
@@ -39,7 +39,7 @@ class AuthNotifier extends Notifier<AuthState> {
     state = state.copyWith(isLoading: true, error: null);
     try {
       final cred = await _service.create(email, password);
-      state = state.copyWith(isLoading: false, user: cred.user, isNewUser: true);
+      state = state.copyWith(user: cred.user, isNewUser: true);
     } catch (e) {
       state = state.copyWith(error: e.toString(), isLoading: false);
     }
