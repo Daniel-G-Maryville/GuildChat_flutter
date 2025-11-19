@@ -38,6 +38,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (isLoggedIn && isOnLogin) return '/home';
       return null;
     },
+    initialLocation: '/',
     routes: [
       GoRoute(path: '/', builder: (context, state) => SplashScreen()),
       GoRoute(path: '/login', builder: (context, state) => LoginScreen()),
