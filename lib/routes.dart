@@ -36,6 +36,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (!isOnCreateUser && authState.isNewUser) return '/user/create';
       if (!isLoggedIn && !isOnLogin) return '/login';
       if (isLoggedIn && isOnLogin) return '/home';
+
       return null;
     },
     initialLocation: '/',
