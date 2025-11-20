@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase;
 
 class AuthState {
   final firebase.User? user;
-  final firebase.FirebaseAuth? auth;
+  final firebase.UserCredential? auth;
   final String? error;
   final bool isLoading;
   final bool isLoggedIn;
@@ -18,7 +18,7 @@ class AuthState {
   });
 
   AuthState copyWith({
-    firebase.FirebaseAuth? auth,
+    firebase.UserCredential? auth,
     firebase.User? user,
     bool? isLoading,
     bool? isNewUser,

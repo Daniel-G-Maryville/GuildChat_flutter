@@ -33,30 +33,31 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isNewUser = authState.isNewUser;
       final isOnLogin = state.matchedLocation == '/login';
       final isOnCreateUser = state.matchedLocation == '/users/create';
+      final isOnSplash = state.matchedLocation == '/splash';
 
       if (!isLoggedIn && !isOnLogin) return '/login';
+      if (isNewUser && !isOnCreateUser) return '/users/create';
       if (isLoggedIn && isOnLogin) return '/home';
-      if (isNewUser && !isOnCreateUser) return 'users/create';
+      if (isOnSplash && !isNewUser) return '/home';
 
       return null;
     },
-    initialLocation: '/',
+    initialLocation: '/splash',
     routes: [
-      GoRoute(path: '/', builder: (context, state) => SplashScreen()),
+      GoRoute(path: '/splash', builder: (context, state) => SplashScreen()),
       GoRoute(path: '/login', builder: (context, state) => LoginScreen()),
-      // GoRoute(path: '/user', builder: (context, state) => UserScreen()),
       GoRoute(
         path: '/home',
         builder: (context, state) =>
             HomeScreen(title: title, viewModel: HomeViewmodel()),
       ),
       GoRoute(
-        path: '/user',
+        path: '/users',
         builder: (context, state) =>
             UserScreen(title: title, viewModel: UserViewmodel()),
       ),
       GoRoute(
-        path: '/user/create',
+        path: '/users/create',
         builder: (context, state) => CreateUserScreen(),
       ),
     ],

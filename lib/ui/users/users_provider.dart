@@ -44,6 +44,7 @@ class UserNotifier extends Notifier<DataState<User>> {
         );
         if (user != null) {
           state = DataState.success(user);
+          ref.read(authNotifierProvider.notifier).userCreated();
         }
       }
     } catch (e) {

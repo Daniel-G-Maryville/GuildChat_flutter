@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+// import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:guild_chat/ui/users/users_provider.dart';
 
@@ -31,13 +31,13 @@ class _CreateUserState extends ConsumerState<CreateUserScreen> {
     final userState = ref.watch(userNotifierProvider);
     _emailController.text = email!;
 
-    if (userState.data != null) {
-      WidgetsBinding.instance.addPersistentFrameCallback((_) {
-        if (mounted) {
-          context.go('/home');
-        }
-      });
-    }
+    // if (userState.data != null) {
+    //   WidgetsBinding.instance.addPersistentFrameCallback((_) {
+    //     if (mounted) {
+    //       context.go('/home');
+    //     }
+    //   });
+    // }
 
     return Scaffold(
       appBar: AppBar(

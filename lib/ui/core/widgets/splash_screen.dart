@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:guild_chat/ui/login/login_provider.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -14,21 +12,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // _navigateToNextScreen();
   }
-
-  // void _navigateToNextScreen() async {
-    // final authState = ref.watch(authNotifierProvider);
-
-    // await Future.delayed(const Duration(seconds: 3));
-
-    // if (!mounted) return;
-    // if (authState.isNewUser) {
-    //   context.pushReplacement('/user/create');
-    // } else {
-    //   context.pushReplacement('/home');
-    // }
-  // }
 
   @override
   Widget build(BuildContext context) {
