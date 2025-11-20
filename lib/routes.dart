@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:guild_chat/ui/homepage/home_screen.dart';
 import 'package:guild_chat/ui/homepage/home_viewmodel.dart';
 import 'package:guild_chat/ui/login/login_provider.dart';
-import 'package:guild_chat/ui/user/user_screen.dart';
-import 'package:guild_chat/ui/user/user_viewmodel.dart';
+import 'package:guild_chat/ui/users/users_screen.dart';
+import 'package:guild_chat/ui/users/users_viewmodel.dart';
 import 'package:guild_chat/ui/login/login_screen.dart';
-import 'package:guild_chat/ui/user/create_user_screen.dart';
+import 'package:guild_chat/ui/users/create_user_screen.dart';
 import 'package:guild_chat/ui/core/widgets/splash_screen.dart';
 
 final String title = 'Guild Chat';
@@ -29,13 +29,14 @@ final routerProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final authState = ref.watch(authNotifierProvider);
       if (authState.isLoading) return null;
-      final isLoggedIn = authState.user != null;
+      final isLoggedIn = authState.isLoggedIn;
+      final isNewUser = authState.isNewUser;
       final isOnLogin = state.matchedLocation == '/login';
-      final isOnCreateUser = state.matchedLocation == '/user/create';
+      final isOnCreateUser = state.matchedLocation == '/users/create';
 
-      if (!isOnCreateUser && authState.isNewUser) return '/user/create';
       if (!isLoggedIn && !isOnLogin) return '/login';
       if (isLoggedIn && isOnLogin) return '/home';
+      if (isNewUser && !isOnCreateUser) return 'users/create';
 
       return null;
     },
