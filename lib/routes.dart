@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:guild_chat/ui/homepage/home_screen.dart';
 import 'package:guild_chat/ui/homepage/home_viewmodel.dart';
 import 'package:guild_chat/ui/login/login_provider.dart';
-import 'package:guild_chat/ui/user_profile/users_viewmodel.dart';
 import 'package:guild_chat/ui/login/login_screen.dart';
 import 'package:guild_chat/ui/user_profile/create_user_profile_screen.dart';
 import 'package:guild_chat/ui/core/widgets/splash_screen.dart';
+import 'package:guild_chat/ui/user_profile/update_user_profile_screen.dart';
 
 final String title = 'Guild Chat';
 
@@ -31,11 +31,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isLoggedIn = authState.isLoggedIn;
       final isNewUser = authState.isNewUser;
       final isOnLogin = state.matchedLocation == '/login';
-      final isOnCreateUser = state.matchedLocation == '/users/create';
+      final isOnCreateUser = state.matchedLocation == '/user_profile/create';
       final isOnSplash = state.matchedLocation == '/splash';
 
       if (!isLoggedIn && !isOnLogin) return '/login';
-      if (isNewUser && !isOnCreateUser) return '/users/create';
+      if (isNewUser && !isOnCreateUser) return '/user_profile/create';
       if (isLoggedIn && isOnLogin) return '/home';
       if (isOnSplash && !isNewUser) return '/home';
 
@@ -51,8 +51,12 @@ final routerProvider = Provider<GoRouter>((ref) {
             HomeScreen(title: title, viewModel: HomeViewmodel()),
       ),
       GoRoute(
-        path: '/users/create',
+        path: '/user_profile/create',
         builder: (context, state) => CreateUserProfileScreen(),
+      ),
+      GoRoute(
+        path: '/user_profile/:id',
+        builder: (context, state) => UpdateUserProfileScreen(),
       ),
     ],
   );

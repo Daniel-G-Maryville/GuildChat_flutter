@@ -51,6 +51,31 @@ class UserProfileNotifier extends Notifier<DataState<UserProfile>> {
     }
   }
 
+  Future<void> update({
+    String email = '',
+    String firstName = '',
+    String lastName = '',
+    String username = '',
+  }) async {
+    state = DataState<UserProfile>.loading();
+
+    try {
+      UserProfile? userProfile = ref.watch(userByEmailProvider).value;
+      if (userProfile != null) {
+        state = DataState.error("User already exists");
+      } else {
+        await UserRepository.update(
+          email: email,
+          firstName: firstName,
+          lastName: lastName,
+          username: username,
+        );
+      }
+    } catch (e) {
+      state = DataState<UserProfile>.error(e.toString());
+    }
+  }
+
   void clearError() => state = DataState.initalize();
 }
 

@@ -56,18 +56,27 @@ class UserRepository {
   }
 
   // Delete a user by ID from Firestore
-  static Future<void> delete(String id) async {
+  static Future<void> delete(String email) async {
     try {
-      await db.collection(collection).doc(id).delete();
+      await db.collection(collection).doc(email).delete();
     } catch (e) {
       debugPrint('Error deleting user: $e');
     }
   }
 
   // Update a user in Firestore
-  static Future<bool> update(UserProfile userProfile) async {
+  static Future<bool> update({
+    String email = '',
+    String username = '',
+    String firstName = '',
+    String lastName = '',
+  }) async {
     try {
-      await db.collection(collection).doc(userProfile.email).update(userProfile.toMap());
+      await db.collection(collection).doc(email).update({
+        username: username,
+        firstName: firstName,
+        lastName: lastName,
+      });
       return true;
     } catch (e) {
       debugPrint('Error updating user: $e');
