@@ -19,6 +19,10 @@ class AuthService {
     );
   }
 
+  User? get currentUser => _auth.currentUser;
+  String? get email => _auth.currentUser?.email;
+  String? get uid => _auth.currentUser?.uid;
+  bool get isLoggedIn => _auth.currentUser != null;
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 }
 
@@ -28,7 +32,11 @@ class AuthNotifier extends Notifier<AuthState> {
 
   @override
   AuthState build() {
-    return const AuthState(); // Initial state here
+    bool isLoggedIn = _service.isLoggedIn;
+    if (isLoggedIn) {
+      return AuthState(email: _service.email, isLoggedIn: isLoggedIn);
+    }
+    return const AuthState();
   }
 
   void userCreated() {
@@ -40,8 +48,7 @@ class AuthNotifier extends Notifier<AuthState> {
     try {
       final cred = await _service.signIn(email, password);
       state = state.copyWith(
-        user: cred.user,
-        auth: cred,
+        email: cred.user?.email,
         isLoggedIn: true,
         isLoading: false,
       );
@@ -53,10 +60,9 @@ class AuthNotifier extends Notifier<AuthState> {
   Future<void> create(String email, String password) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final cred = await _service.create(email, password);
+      await _service.create(email, password);
       state = state.copyWith(
-        user: cred.user,
-        auth: cred,
+        email: email,
         isLoggedIn: true,
         isLoading: false,
         isNewUser: true,
@@ -70,18 +76,15 @@ class AuthNotifier extends Notifier<AuthState> {
 }
 
 // Providers
-// TODO: Revisit this stream provider
 final authStateProvider = StreamProvider<AuthState>((ref) {
-  final authService = ref.watch(
-    authServiceProvider,
-  ); // Assume you have a provider for AuthService
+  final authService = ref.watch(authServiceProvider);
 
   return authService.authStateChanges
       .map((user) {
         if (user == null) {
           return AuthState();
         } else {
-          return AuthState(user: user);
+          return AuthState(email: user.email);
         }
       })
       .handleError((error) {

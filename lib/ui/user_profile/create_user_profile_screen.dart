@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 // import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:guild_chat/ui/users/users_provider.dart';
+import 'package:guild_chat/ui/user_profile/user_profile_provider.dart';
 
-class CreateUserScreen extends ConsumerStatefulWidget {
-  const CreateUserScreen({super.key});
+class CreateUserProfileScreen extends ConsumerStatefulWidget {
+  const CreateUserProfileScreen({super.key});
 
   @override
-  ConsumerState<CreateUserScreen> createState() => _CreateUserState();
+  ConsumerState<CreateUserProfileScreen> createState() =>
+      _CreateUserProfileState();
 }
 
-class _CreateUserState extends ConsumerState<CreateUserScreen> {
+class _CreateUserProfileState extends ConsumerState<CreateUserProfileScreen> {
   final _title = 'Create User Profile';
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -28,7 +29,7 @@ class _CreateUserState extends ConsumerState<CreateUserScreen> {
   @override
   Widget build(BuildContext context) {
     final email = ref.watch(authEmailProvider).value;
-    final userState = ref.watch(userNotifierProvider);
+    final userState = ref.watch(userProfileNotifierProvider);
     _emailController.text = email!;
 
     // if (userState.data != null) {
@@ -80,15 +81,14 @@ class _CreateUserState extends ConsumerState<CreateUserScreen> {
             ElevatedButton(
               onPressed: _usernameController.text == ''
                   ? null
-                  : () => 
-                    ref
-                    .read(userNotifierProvider.notifier)
-                    .create(
-                      email: email, // use a guarnteed value
-                      username: _usernameController.text,
-                      firstName: _firstNameController.text,
-                      lastName: _lastNameController.text,
-                    ),
+                  : () => ref
+                        .read(userProfileNotifierProvider.notifier)
+                        .create(
+                          email: email, // use a guarnteed value
+                          username: _usernameController.text,
+                          firstName: _firstNameController.text,
+                          lastName: _lastNameController.text,
+                        ),
               child: const Text('Submit'),
             ),
           ],

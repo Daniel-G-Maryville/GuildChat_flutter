@@ -4,23 +4,22 @@ import 'package:guild_chat/models/data_state.dart';
 import 'package:guild_chat/models/user.dart'; // Your User model
 import 'package:guild_chat/ui/login/login_provider.dart'; // For authNotifierProvider
 
-final userByEmailProvider = FutureProvider.autoDispose<User?>((ref) async {
+final userByEmailProvider = FutureProvider.autoDispose<UserProfile?>((
+  ref,
+) async {
   final email = ref.watch(authEmailProvider).value;
 
   return await UserRepository.getUserByEmail(email!); // Await here
 });
 
 final authEmailProvider = FutureProvider.autoDispose<String?>((ref) async {
-  final authState = ref.watch(authNotifierProvider);
-  final email = authState.user?.email;
-
-  return email;
+  return ref.watch(authNotifierProvider).email;
 });
 
-class UserNotifier extends Notifier<DataState<User>> {
+class UserProfileNotifier extends Notifier<DataState<UserProfile>> {
   @override
-  DataState<User> build() {
-    return DataState<User>.initalize();
+  DataState<UserProfile> build() {
+    return DataState<UserProfile>.initalize();
   }
 
   Future<void> create({
@@ -29,32 +28,33 @@ class UserNotifier extends Notifier<DataState<User>> {
     String lastName = '',
     String username = '',
   }) async {
-    state = DataState<User>.loading();
+    state = DataState<UserProfile>.loading();
 
     try {
-      User? user = ref.watch(userByEmailProvider).value;
-      if (user != null) {
+      UserProfile? userProfile = ref.watch(userByEmailProvider).value;
+      if (userProfile != null) {
         state = DataState.error("User already exists");
       } else {
-        user = await UserRepository.create(
+        userProfile = await UserRepository.create(
           email: email,
           firstName: firstName,
           lastName: lastName,
           username: username,
         );
-        if (user != null) {
-          state = DataState.success(user);
+        if (userProfile != null) {
+          state = DataState.success(userProfile);
           ref.read(authNotifierProvider.notifier).userCreated();
         }
       }
     } catch (e) {
-      state = DataState<User>.error(e.toString());
+      state = DataState<UserProfile>.error(e.toString());
     }
   }
 
   void clearError() => state = DataState.initalize();
 }
 
-final userNotifierProvider = NotifierProvider<UserNotifier, DataState<User>>(
-  () => UserNotifier(),
-);
+final userProfileNotifierProvider =
+    NotifierProvider<UserProfileNotifier, DataState<UserProfile>>(
+      () => UserProfileNotifier(),
+    );

@@ -4,10 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:guild_chat/ui/homepage/home_screen.dart';
 import 'package:guild_chat/ui/homepage/home_viewmodel.dart';
 import 'package:guild_chat/ui/login/login_provider.dart';
-import 'package:guild_chat/ui/users/users_screen.dart';
-import 'package:guild_chat/ui/users/users_viewmodel.dart';
+import 'package:guild_chat/ui/user_profile/users_viewmodel.dart';
 import 'package:guild_chat/ui/login/login_screen.dart';
-import 'package:guild_chat/ui/users/create_user_screen.dart';
+import 'package:guild_chat/ui/user_profile/create_user_profile_screen.dart';
 import 'package:guild_chat/ui/core/widgets/splash_screen.dart';
 
 final String title = 'Guild Chat';
@@ -52,13 +51,8 @@ final routerProvider = Provider<GoRouter>((ref) {
             HomeScreen(title: title, viewModel: HomeViewmodel()),
       ),
       GoRoute(
-        path: '/users',
-        builder: (context, state) =>
-            UserScreen(title: title, viewModel: UserViewmodel()),
-      ),
-      GoRoute(
         path: '/users/create',
-        builder: (context, state) => CreateUserScreen(),
+        builder: (context, state) => CreateUserProfileScreen(),
       ),
     ],
   );

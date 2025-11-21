@@ -1,16 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart' as firebase;
-
 class AuthState {
-  final firebase.User? user;
-  final firebase.UserCredential? auth;
+  final String? email;
   final String? error;
   final bool isLoading;
   final bool isLoggedIn;
   final bool isNewUser;
 
   const AuthState({
-    this.user,
-    this.auth,
+    this.email = '',
     this.error,
     this.isLoading = false,
     this.isLoggedIn = false,
@@ -18,16 +14,14 @@ class AuthState {
   });
 
   AuthState copyWith({
-    firebase.UserCredential? auth,
-    firebase.User? user,
+    String? email,
     bool? isLoading,
     bool? isNewUser,
     bool? isLoggedIn,
     String? error,
   }) {
     return AuthState(
-      auth: auth ?? this.auth,
-      user: user ?? this.user,
+      email: email,
       isLoading: isLoading ?? this.isLoading,
       isNewUser: isNewUser ?? this.isNewUser,
       isLoggedIn: isLoggedIn ?? this.isLoggedIn,
