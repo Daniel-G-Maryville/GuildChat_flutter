@@ -8,6 +8,8 @@ import 'package:guild_chat/ui/login/login_screen.dart';
 import 'package:guild_chat/ui/user_profile/create_user_profile_screen.dart';
 import 'package:guild_chat/ui/core/widgets/splash_screen.dart';
 import 'package:guild_chat/ui/user_profile/update_user_profile_screen.dart';
+import 'package:guild_chat/ui/guild/guild_viewmodel.dart';
+import 'package:guild_chat/ui/guild/guild_screen.dart';
 
 final String title = 'Guild Chat';
 
@@ -38,6 +40,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (isNewUser && !isOnCreateUser) return '/user_profile/create';
       if (isLoggedIn && isOnLogin) return '/home';
       if (isOnSplash && !isNewUser) return '/home';
+      //temp override
+      if (isOnSplash) return '/home';
 
       return null;
     },
@@ -58,6 +62,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/user_profile/:id',
         builder: (context, state) => UpdateUserProfileScreen(),
       ),
+      GoRoute(
+        path: '/guild',
+        builder: (context, state) => GuildScreen(title: title, viewModel: GuildViewmodel()), 
+      )
     ],
   );
 });
