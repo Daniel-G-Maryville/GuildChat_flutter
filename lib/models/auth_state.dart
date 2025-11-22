@@ -6,7 +6,7 @@ class AuthState {
   final bool isNewUser;
 
   const AuthState({
-    this.email = '',
+    this.email,
     this.error,
     this.isLoading = false,
     this.isLoggedIn = false,

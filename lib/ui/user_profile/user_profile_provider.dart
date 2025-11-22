@@ -4,9 +4,7 @@ import 'package:guild_chat/models/data_state.dart';
 import 'package:guild_chat/models/user.dart'; // Your User model
 import 'package:guild_chat/ui/login/login_provider.dart'; // For authNotifierProvider
 
-final userByEmailProvider = FutureProvider.autoDispose<UserProfile?>((
-  ref,
-) async {
+final userByEmailProvider = FutureProvider.autoDispose<Guild?>((ref) async {
   final email = ref.watch(authEmailProvider).value;
 
   return await UserRepository.getUserByEmail(email!); // Await here
@@ -16,10 +14,10 @@ final authEmailProvider = FutureProvider.autoDispose<String?>((ref) async {
   return ref.watch(authNotifierProvider).email;
 });
 
-class UserProfileNotifier extends Notifier<DataState<UserProfile>> {
+class UserProfileNotifier extends Notifier<DataState<Guild>> {
   @override
-  DataState<UserProfile> build() {
-    return DataState<UserProfile>.initalize();
+  DataState<Guild> build() {
+    return DataState<Guild>.initalize();
   }
 
   Future<void> create({
@@ -28,10 +26,10 @@ class UserProfileNotifier extends Notifier<DataState<UserProfile>> {
     String lastName = '',
     String username = '',
   }) async {
-    state = DataState<UserProfile>.loading();
+    state = DataState<Guild>.loading();
 
     try {
-      UserProfile? userProfile = ref.watch(userByEmailProvider).value;
+      Guild? userProfile = ref.watch(userByEmailProvider).value;
       if (userProfile != null) {
         state = DataState.error("User already exists");
       } else {
@@ -47,7 +45,7 @@ class UserProfileNotifier extends Notifier<DataState<UserProfile>> {
         }
       }
     } catch (e) {
-      state = DataState<UserProfile>.error(e.toString());
+      state = DataState<Guild>.error(e.toString());
     }
   }
 
@@ -57,10 +55,10 @@ class UserProfileNotifier extends Notifier<DataState<UserProfile>> {
     String lastName = '',
     String username = '',
   }) async {
-    state = DataState<UserProfile>.loading();
+    state = DataState<Guild>.loading();
 
     try {
-      UserProfile? userProfile = ref.watch(userByEmailProvider).value;
+      Guild? userProfile = ref.watch(userByEmailProvider).value;
       if (userProfile != null) {
         state = DataState.error("User already exists");
       } else {
@@ -72,7 +70,7 @@ class UserProfileNotifier extends Notifier<DataState<UserProfile>> {
         );
       }
     } catch (e) {
-      state = DataState<UserProfile>.error(e.toString());
+      state = DataState<Guild>.error(e.toString());
     }
   }
 
@@ -80,6 +78,6 @@ class UserProfileNotifier extends Notifier<DataState<UserProfile>> {
 }
 
 final userProfileNotifierProvider =
-    NotifierProvider<UserProfileNotifier, DataState<UserProfile>>(
+    NotifierProvider<UserProfileNotifier, DataState<Guild>>(
       () => UserProfileNotifier(),
     );

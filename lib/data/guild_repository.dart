@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:guild_chat/models/user.dart'; // Import the model
+import 'package:guild_chat/models/guild.dart'; // Import the model
 
 // Assuming db is a global or injected Firestore instance
 final db = FirebaseFirestore.instance;
-final collection = 'user_profile';
+final collection = 'guild';
 
-class UserRepository {
+class GuildRepository {
   // Get a user by email (document ID assumed to be email)
-  static Future<Guild?> getUserByEmail(String email) async {
+  static Future<Guild?> getGuildByName(String guild_name) async {
     try {
-      final docSnapshot = await db.collection(collection).doc(email).get();
+      final docSnapshot = await db.collection(collection).doc(guild_name).get();
       if (docSnapshot.exists) {
         return Guild.fromMap(docSnapshot.data()!, docSnapshot.id);
       }
