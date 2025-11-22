@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 //import 'package:guild_chat/models/user.dart'; // Uncomment when needed
 
 class GuildViewmodel extends ChangeNotifier {
-  // A mock list of guilds the user is a part of.
+  // A mock list of chats in the guild
   // Later, this would be fetched from your database.
   final List<String> _guildChats = [
     'Newcomers',

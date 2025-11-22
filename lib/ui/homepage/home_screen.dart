@@ -10,6 +10,7 @@ class HomeScreen extends StatefulWidget {
   });
 
   final String title;
+  //holds the home_viewmodel data
   final HomeViewmodel viewModel;
 
   @override
@@ -38,11 +39,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //creates top bar with navigation
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
         centerTitle: true,
         actions: [
+          //settings button to transfer to user settings
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
@@ -54,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          //this segment displays the guilds with functionality to bring the users to that guilds page
           children: <Widget>[
             Expanded(
               child: ListView(
@@ -74,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       onTap: () {
                         //temp page switch logic
-                        context.go('/guild');
+                        context.push('/guild');
                       },
                     ),
                   );
@@ -84,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+      //this segment is for the bottom navigation settings, find guild and create guild
       bottomNavigationBar: SafeArea(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

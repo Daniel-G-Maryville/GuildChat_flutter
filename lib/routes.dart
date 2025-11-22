@@ -40,8 +40,6 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (isNewUser && !isOnCreateUser) return '/user_profile/create';
       if (isLoggedIn && isOnLogin) return '/home';
       if (isOnSplash && !isNewUser) return '/home';
-      //temp override
-      if (isOnSplash) return '/home';
 
       return null;
     },

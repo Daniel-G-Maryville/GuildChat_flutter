@@ -11,6 +11,7 @@ class GuildScreen extends StatefulWidget {
   });
 
   final String title;
+  //this contains the guild_viewmodel data
   final GuildViewmodel viewModel;
 
   @override
@@ -44,7 +45,7 @@ class _GuildScreenState extends State<GuildScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            context.go('/home');
+            context.pop();
           },
         ),
         title: Text(widget.title),
