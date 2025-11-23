@@ -15,7 +15,7 @@ final String title = 'Guild Chat';
 
 final authListenableProvider = Provider.autoDispose<ValueNotifier<void>>((ref) {
   final notifier = ValueNotifier<void>(null);
-  ref.listen(authNotifierProvider, (_, _) {
+  ref.listen(authStreamProvider, (_, _) {
     notifier.value = null; // Trigger on any auth change
   });
   ref.onDispose(notifier.dispose);

@@ -19,6 +19,17 @@ class AuthService {
     );
   }
 
+  Future<void> checkSession() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      try {
+        await user.getIdToken(true); // Force refresh
+      } catch (e) {
+        await _auth.signOut();
+      }
+    }
+  }
+
   User? get currentUser => _auth.currentUser;
   String? get email => _auth.currentUser?.email;
   String? get uid => _auth.currentUser?.uid;
@@ -92,6 +103,9 @@ final authStateProvider = StreamProvider<AuthState>((ref) {
       });
 });
 final authServiceProvider = Provider<AuthService>((ref) => AuthService());
+final authStreamProvider = StreamProvider<User?>((ref) {
+  return ref.watch(authServiceProvider).authStateChanges;
+});
 final authNotifierProvider = NotifierProvider<AuthNotifier, AuthState>(
   () => AuthNotifier(),
 );
