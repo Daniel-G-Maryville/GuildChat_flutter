@@ -79,7 +79,6 @@ class _UpdateUserProfileState extends ConsumerState<UpdateUserProfileScreen> {
                       ref
                           .read(userProfileNotifierProvider.notifier)
                           .update(
-                            email: _emailController.text, // use a guarnteed value
                             username: _usernameController.text,
                             firstName: _firstNameController.text,
                             lastName: _lastNameController.text,

@@ -11,6 +11,7 @@
 .svn/
 .swiftpm/
 .kotlin/
+.grok/
 migrate_working_dir/
 firebase_options.dart
 google-services.json

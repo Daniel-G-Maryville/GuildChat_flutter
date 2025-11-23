@@ -9,11 +9,11 @@ final guildCollection = 'guilds';
 
 class UserRepository {
   // Get a user by email (document ID assumed to be email)
-  static Future<Guild?> getUserByEmail(String email) async {
+  static Future<UserProfile?> getUserByEmail(String email) async {
     try {
       final docSnapshot = await db.collection(collection).doc(email).get();
       if (docSnapshot.exists) {
-        return Guild.fromMap(docSnapshot.data()!, docSnapshot.id);
+        return UserProfile.fromMap(docSnapshot.data()!, docSnapshot.id);
       }
     } catch (e) {
       debugPrint('Error getting user by email: $e');
@@ -22,11 +22,11 @@ class UserRepository {
   }
 
   // Get all users from Firestore
-  static Future<List<Guild>> getAllUsers() async {
+  static Future<List<UserProfile>> getAllUsers() async {
     try {
       final querySnapshot = await db.collection(collection).get();
       return querySnapshot.docs.map((doc) {
-        return Guild.fromMap(doc.data(), doc.id);
+        return UserProfile.fromMap(doc.data(), doc.id);
       }).toList();
     } catch (e) {
       debugPrint('Error getting users: $e');
@@ -35,7 +35,7 @@ class UserRepository {
   }
 
   // Create a new user in Firestore (using email as document ID)
-  static Future<Guild?> create({
+  static Future<UserProfile?> create({
     String email = '',
     String username = '',
     String firstName = '',
@@ -43,7 +43,7 @@ class UserRepository {
     List<String> guilds = const [],
   }) async {
     try {
-      final newUser = Guild(
+      final newUser = UserProfile(
         username: username.trim(),
         firstName: firstName.trim(),
         lastName: lastName.trim(),
