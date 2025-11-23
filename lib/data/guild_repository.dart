@@ -5,81 +5,86 @@ import 'package:guild_chat/models/guild.dart'; // Import the model
 // Assuming db is a global or injected Firestore instance
 final db = FirebaseFirestore.instance;
 final collection = 'guild';
+final memberCollection = 'members';
 
 class GuildRepository {
-  // Get a user by email (document ID assumed to be email)
-  static Future<Guild?> getGuildByName(String guild_name) async {
+  // Get a guild by name (document ID assumed to be email)
+  static Future<Guild?> getGuildByName(String name) async {
     try {
-      final docSnapshot = await db.collection(collection).doc(guild_name).get();
+      final docSnapshot = await db.collection(collection).doc(name).get();
       if (docSnapshot.exists) {
         return Guild.fromMap(docSnapshot.data()!, docSnapshot.id);
       }
     } catch (e) {
-      debugPrint('Error getting user by email: $e');
+      debugPrint('Error getting guild by name: $e');
     }
     return null;
   }
 
-  // Get all users from Firestore
-  static Future<List<Guild>> getAllUsers() async {
+  // Get all guilds from Firestore
+  static Future<List<Guild>> getAllguilds() async {
     try {
       final querySnapshot = await db.collection(collection).get();
       return querySnapshot.docs.map((doc) {
         return Guild.fromMap(doc.data(), doc.id);
       }).toList();
     } catch (e) {
-      debugPrint('Error getting users: $e');
+      debugPrint('Error getting guilds: $e');
       rethrow;
     }
   }
 
-  // Create a new user in Firestore (using email as document ID)
+  // Create a new guild in Firestore (using email as document ID)
   static Future<Guild?> create({
-    String email = '',
-    String username = '',
-    String firstName = '',
-    String lastName = '',
+    String guildName = '',
+    String ownerId = '',
+    List<String> members = const [],
   }) async {
     try {
-      final newUser = Guild(
-        username: username,
-        firstName: firstName,
-        lastName: lastName,
-        email: email.toLowerCase().trim(),
+      final newguild = Guild(
+        guildName: guildName,
+        ownerId: ownerId,
+        members: members,
       );
-      await db.collection(collection).doc(email).set(newUser.toMap());
-      return newUser;
+      await db.collection(collection).doc(guildName).set(newguild.toMap());
+      return newguild;
     } catch (e) {
-      debugPrint('Error creating user: $e');
+      debugPrint('Error creating guild: $e');
     }
     return null;
   }
 
-  // Delete a user by ID from Firestore
-  static Future<void> delete(String email) async {
+  // Delete a guild by ID from Firestore
+  static Future<void> delete(String name) async {
     try {
-      await db.collection(collection).doc(email).delete();
+      await db.collection(collection).doc(name).delete();
     } catch (e) {
-      debugPrint('Error deleting user: $e');
+      debugPrint('Error deleting guild: $e');
     }
   }
 
-  // Update a user in Firestore
-  static Future<bool> update({
-    String email = '',
-    String username = '',
-    String firstName = '',
-    String lastName = '',
-  }) async {
+  // Add Member to guild
+  static Future<bool> addMember(String guildName, String member) async {
     try {
-      await db.collection(collection).doc(email).update({
-        username: username,
-        firstName: firstName,
-        lastName: lastName,
+      await db.collection(collection).doc(guildName).update({
+        memberCollection: FieldValue.arrayUnion([member]),
       });
       return true;
     } catch (e) {
-      debugPrint('Error updating user: $e');
+      debugPrint('Error updating guild: $e');
+      return false;
+    }
+  }
+
+  // Remove member from guild
+  static Future<bool> removeMember(String guildName, String member) async {
+    try {
+      await db.collection(collection).doc(guildName).update({
+        memberCollection: FieldValue.arrayRemove([member]),
+      });
+      return true;
+    } catch (e) {
+      debugPrint('Error updating guild: $e');
       return false;
     }
   }

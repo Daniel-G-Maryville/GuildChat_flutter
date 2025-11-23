@@ -5,6 +5,7 @@ import 'package:guild_chat/models/user.dart'; // Import the model
 // Assuming db is a global or injected Firestore instance
 final db = FirebaseFirestore.instance;
 final collection = 'user_profile';
+final guildCollection = 'guilds';
 
 class UserRepository {
   // Get a user by email (document ID assumed to be email)
@@ -39,13 +40,15 @@ class UserRepository {
     String username = '',
     String firstName = '',
     String lastName = '',
+    List<String> guilds = const [],
   }) async {
     try {
       final newUser = Guild(
-        username: username,
-        firstName: firstName,
-        lastName: lastName,
+        username: username.trim(),
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
         email: email.toLowerCase().trim(),
+        guilds: guilds,
       );
       await db.collection(collection).doc(email).set(newUser.toMap());
       return newUser;
@@ -80,6 +83,32 @@ class UserRepository {
       return true;
     } catch (e) {
       debugPrint('Error updating user: $e');
+      return false;
+    }
+  }
+
+  // Add guild to user
+  static Future<bool> addGuild(String email, String guild) async {
+    try {
+      await db.collection(collection).doc(email).update({
+        guildCollection: FieldValue.arrayUnion([guild]),
+      });
+      return true;
+    } catch (e) {
+      debugPrint('Error updating guild: $e');
+      return false;
+    }
+  }
+
+  // Remove member from guild
+  static Future<bool> removeMember(String email, String guild) async {
+    try {
+      await db.collection(collection).doc(email).update({
+        guildCollection: FieldValue.arrayRemove([guild]),
+      });
+      return true;
+    } catch (e) {
+      debugPrint('Error updating guild: $e');
       return false;
     }
   }

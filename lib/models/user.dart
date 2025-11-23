@@ -3,6 +3,7 @@ class Guild {
   final String email;
   final String firstName;
   final String lastName;
+  final List<String> guilds;
 
   // Constructor for creating a new User
   Guild({
@@ -10,6 +11,7 @@ class Guild {
     this.firstName = '',
     this.lastName = '',
     this.email = '',
+    this.guilds = const [],
   });
 
   // Factory constructor to create User from Firestore document
@@ -19,6 +21,7 @@ class Guild {
       firstName: map['firstName'],
       lastName: map['lastName'],
       email: map['email'],
+      guilds: map['guilds'],
     );
   }
 
@@ -29,6 +32,7 @@ class Guild {
       'firstName': firstName,
       'lastName': lastName,
       'email': email,
+      'guilds': guilds,
     };
   }
 }

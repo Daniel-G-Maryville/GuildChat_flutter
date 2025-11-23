@@ -1,31 +1,30 @@
 class Guild {
   final String guildName;
-  final List<String>? members; // list of member ids
+  final List<String> members; // list of member ids
   final String ownerId;
 
-  // Constructor for creating a new User
+  // Constructor for creating a new Guild
   Guild({
     this.guildName = '',
-    this.members,
+    this.members = const [],
     this.ownerId = '',
   });
 
-  // Factory constructor to create User from Firestore document
+  // Factory constructor to create Guild from Firestore document
   factory Guild.fromMap(Map<String, dynamic> map, String id) {
     return Guild(
       guildName: map['guildName'],
       ownerId: map['ownerId'],
-      members: map['members'],
+      members: (map['members'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
    );
   }
 
-  // Convert User to a map for Firestore
+  // Convert Guild to a map for Firestore
   Map<String, dynamic> toMap() {
     return {
       'guildName': guildName,
-      'firstName': firstName,
-      'lastName': lastName,
-      'email': email,
+      'members': members,
+      'ownerId': ownerId,
     };
   }
 }
