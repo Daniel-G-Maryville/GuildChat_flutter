@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class CreateGuildScreen extends StatefulWidget {
-  const CreateGuildScreen({
+class FindGuildScreen extends StatefulWidget {
+  const FindGuildScreen({
     super.key,
     required this.title,
   });
@@ -10,10 +10,10 @@ class CreateGuildScreen extends StatefulWidget {
   final String title;
 
   @override
-  State<CreateGuildScreen> createState() => _CreateGuildScreenState();
+  State<FindGuildScreen> createState() => _FindGuildScreenState();
 }
 
-class _CreateGuildScreenState extends State<CreateGuildScreen> {
+class _FindGuildScreenState extends State<FindGuildScreen> {
   @override
   void initState() {
     super.initState();
@@ -25,7 +25,6 @@ class _CreateGuildScreenState extends State<CreateGuildScreen> {
   }
 
   final _guildNameController = TextEditingController();
-  final _guildDescriptionController = TextEditingController();
 
   //top navigation pannel construction
   @override
@@ -45,26 +44,21 @@ class _CreateGuildScreenState extends State<CreateGuildScreen> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          //this holds the textboxes and button to later control the creation of a guild
+          //this holds the textbox and button to later control the finding of a guild
           children: [
             TextField(
               controller: _guildNameController,
               decoration: const InputDecoration(labelText: 'Guild Name'),
             ),
             const SizedBox(height: 20),
-            TextField(
-              controller: _guildDescriptionController,
-              decoration: const InputDecoration(labelText: 'Description'),
-            ),
-            const SizedBox(height: 60),
             ElevatedButton(
               onPressed: () {
-                //replace with actual guild creation logic in the future
+                //replace with actual guild finding logic in the future
               ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Create ${_guildNameController.text} guild')),
+                          SnackBar(content: Text('Find ${_guildNameController.text} guild')),
                         );
               },
-              child: const Text('Create Guild'),
+              child: const Text('Find Guild'),
             ),
           ]
         ),
