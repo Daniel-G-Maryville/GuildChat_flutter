@@ -56,7 +56,7 @@ class _GuildScreenState extends State<GuildScreen> {
             onPressed: () {
               //replace with actual navigation logic in the future
               ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Go to chats settings page')),
+                          SnackBar(content: Text('Go to guild settings page')),
                         );
             },
           ),
@@ -84,10 +84,8 @@ class _GuildScreenState extends State<GuildScreen> {
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       onTap: () {
-                        // Replace with actual navigation, e.g., context.go('/guild/$guildName');
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Go to "$chatName" page')),
-                        );
+                        // temporary simple navigation
+                        context.push('/chat');
                       },
                     ),
                   );
