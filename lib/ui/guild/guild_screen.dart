@@ -36,7 +36,7 @@ class _GuildScreenState extends State<GuildScreen> {
       setState(() {});
     }
   }
-
+  //this creates the top navigation pannel
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,10 +54,7 @@ class _GuildScreenState extends State<GuildScreen> {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              //replace with actual navigation logic in the future
-              ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Go to chats settings page')),
-                        );
+              context.push('/guild/update');
             },
           ),
         ],
@@ -84,10 +81,8 @@ class _GuildScreenState extends State<GuildScreen> {
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       onTap: () {
-                        // Replace with actual navigation, e.g., context.go('/guild/$guildName');
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Go to "$chatName" page')),
-                        );
+                        // temporary simple navigation
+                        context.push('/chat');
                       },
                     ),
                   );

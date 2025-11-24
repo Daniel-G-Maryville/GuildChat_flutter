@@ -16,7 +16,7 @@ class GuildViewmodel extends ChangeNotifier {
   // Example method to update guilds (e.g., from DB)
   Future<void> loadChats() async {
     // Simulate fetching from DB
-    // _userGuilds = await fetchGuildsFromDB();
+    // _guildChats = await fetchChatsFromDB();
     notifyListeners();
   }
 }
