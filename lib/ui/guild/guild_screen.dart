@@ -36,7 +36,7 @@ class _GuildScreenState extends State<GuildScreen> {
       setState(() {});
     }
   }
-
+  //this creates the top navigation pannel
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,10 +54,7 @@ class _GuildScreenState extends State<GuildScreen> {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              //replace with actual navigation logic in the future
-              ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Go to guild settings page')),
-                        );
+              context.push('/guild/update');
             },
           ),
         ],

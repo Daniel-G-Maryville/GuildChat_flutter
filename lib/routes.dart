@@ -13,6 +13,7 @@ import 'package:guild_chat/ui/guild/guild_screen.dart';
 import 'package:guild_chat/ui/chat/chat_screen.dart';
 import 'package:guild_chat/ui/chat/chat_viewmodel.dart';
 import 'package:guild_chat/ui/guild/create_guild_screen.dart';
+import 'package:guild_chat/ui/guild/update_guild_screen.dart';
 
 final String title = 'Guild Chat';
 
@@ -74,6 +75,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/guild/create',
         builder: (context, state) => CreateGuildScreen(title: title), 
+      ),
+      GoRoute(
+        path: '/guild/update',
+        builder: (context, state) => UpdateGuildScreen(title: title), 
       ),
     ],
   );
