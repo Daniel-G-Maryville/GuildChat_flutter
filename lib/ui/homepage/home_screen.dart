@@ -106,10 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(width: 16),
             FloatingActionButton.extended(
               onPressed: () {
-                // Replace with actual navigation, e.g., context.go('/create-guild');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Go to the Create Guild page')),
-                );
+                context.push('/guild/create');
               },
               label: const Text('Create Guild'),
               icon: const Icon(Icons.add),
