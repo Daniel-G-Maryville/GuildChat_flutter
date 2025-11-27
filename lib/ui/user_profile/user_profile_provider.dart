@@ -8,16 +8,12 @@ import 'package:guild_chat/ui/login/login_provider.dart'; // For authNotifierPro
 final userByEmailProvider = FutureProvider.autoDispose<UserProfile?>((
   ref,
 ) async {
-  final email = ref.watch(authEmailProvider).value;
+  final email = ref.watch(authServiceProvider).email;
   debugPrint("Email: $email");
 
   if (email == null) return null;
 
   return await UserRepository.getUserByEmail(email); // Await here
-});
-
-final authEmailProvider = FutureProvider.autoDispose<String?>((ref) async {
-  return ref.watch(authNotifierProvider).email;
 });
 
 class UserProfileService {

@@ -78,9 +78,9 @@ class UserRepository {
   }) async {
     try {
       await db.collection(collection).doc(email).update({
-        username: username,
-        firstName: firstName,
-        lastName: lastName,
+        'firstName': firstName.trim(),
+        'username': username.trim(),
+        'lastName': lastName.trim(),
       });
       return true;
     } catch (e) {
