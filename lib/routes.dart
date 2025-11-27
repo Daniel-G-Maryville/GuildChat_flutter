@@ -2,7 +2,6 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:guild_chat/ui/homepage/home_screen.dart';
-import 'package:guild_chat/ui/homepage/home_viewmodel.dart';
 import 'package:guild_chat/ui/login/login_provider.dart';
 import 'package:guild_chat/ui/login/login_screen.dart';
 import 'package:guild_chat/ui/user_profile/create_user_profile_screen.dart';
@@ -52,11 +51,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(path: '/splash', builder: (context, state) => SplashScreen()),
       GoRoute(path: '/login', builder: (context, state) => LoginScreen()),
-      GoRoute(
-        path: '/home',
-        builder: (context, state) =>
-            HomeScreen(title: title, viewModel: HomeViewmodel()),
-      ),
+      GoRoute(path: '/home', builder: (context, state) => HomeScreen()),
       GoRoute(
         path: '/user_profile/create',
         builder: (context, state) => CreateUserProfileScreen(),

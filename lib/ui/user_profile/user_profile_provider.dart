@@ -16,10 +16,6 @@ final userByEmailProvider = FutureProvider.autoDispose<UserProfile?>((
   return await UserRepository.getUserByEmail(email); // Await here
 });
 
-class UserProfileService {
-
-}
-
 class UserProfileNotifier extends Notifier<DataState<UserProfile>> {
   @override
   DataState<UserProfile> build() {
