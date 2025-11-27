@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart'; // Provides debugPrint
 import 'package:guild_chat/data/user_repository.dart'; // Your repo
 import 'package:guild_chat/models/data_state.dart';
-import 'package:guild_chat/models/user.dart'; // Your User model
+import 'package:guild_chat/models/user_profile.dart'; // Your User model
 import 'package:guild_chat/ui/login/login_provider.dart'; // For authNotifierProvider
 
 final userByEmailProvider = FutureProvider.autoDispose<UserProfile?>((

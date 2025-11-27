@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:guild_chat/models/user.dart'; // Import the model
+import 'package:guild_chat/models/user_profile.dart'; // Import the model
 
 // Assuming db is a global or injected Firestore instance
 final db = FirebaseFirestore.instance;
