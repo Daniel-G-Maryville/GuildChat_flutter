@@ -37,8 +37,10 @@ class AuthService {
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 }
 
-// ViewModel (now using Notifier)
-class AuthNotifier extends Notifier<AuthState> {
+// This is the notifier for our auth_state object.
+// It uses the Firesbase Auth service to log in or craete a new account
+// This updates the state of our auth_state object for listeners
+class AuthStateNotifier extends Notifier<AuthState> {
   late final AuthService _service = ref.watch(authServiceProvider);
 
   @override
@@ -86,26 +88,11 @@ class AuthNotifier extends Notifier<AuthState> {
   void clearError() => state = state.copyWith(error: null);
 }
 
-// Providers
-final authStateProvider = StreamProvider<AuthState>((ref) {
-  final authService = ref.watch(authServiceProvider);
 
-  return authService.authStateChanges
-      .map((user) {
-        if (user == null) {
-          return AuthState();
-        } else {
-          return AuthState(email: user.email);
-        }
-      })
-      .handleError((error) {
-        return AuthState(error: error.toString());
-      });
-});
 final authServiceProvider = Provider<AuthService>((ref) => AuthService());
 final authStreamProvider = StreamProvider<User?>((ref) {
   return ref.watch(authServiceProvider).authStateChanges;
 });
-final authNotifierProvider = NotifierProvider<AuthNotifier, AuthState>(
-  () => AuthNotifier(),
+final authNotifierProvider = NotifierProvider<AuthStateNotifier, AuthState>(
+  () => AuthStateNotifier(),
 );

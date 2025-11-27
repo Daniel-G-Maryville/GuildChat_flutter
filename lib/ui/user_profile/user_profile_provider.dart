@@ -20,6 +20,10 @@ final authEmailProvider = FutureProvider.autoDispose<String?>((ref) async {
   return ref.watch(authNotifierProvider).email;
 });
 
+class UserProfileService {
+
+}
+
 class UserProfileNotifier extends Notifier<DataState<UserProfile>> {
   @override
   DataState<UserProfile> build() {
@@ -92,6 +96,6 @@ class UserProfileNotifier extends Notifier<DataState<UserProfile>> {
 }
 
 final userProfileNotifierProvider =
-    NotifierProvider<UserProfileNotifier, DataState<UserProfile>>(
-      () => UserProfileNotifier(),
-    );
+  NotifierProvider<UserProfileNotifier, DataState<UserProfile>>(
+    () => UserProfileNotifier(),
+  );

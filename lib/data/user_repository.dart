@@ -34,7 +34,7 @@ class UserRepository {
     }
   }
 
-  // Create a new user in Firestore (using email as document ID)
+  // Create a new userProfile in Firestore (using email as document ID)
   static Future<UserProfile?> create({
     String email = '',
     String username = '',
@@ -50,7 +50,9 @@ class UserRepository {
         email: email.toLowerCase().trim(),
         guilds: guilds,
       );
+      debugPrint("Trying to create the UserProfile: $newUser");
       await db.collection(collection).doc(email).set(newUser.toMap());
+      debugPrint("Created new UserProfile");
       return newUser;
     } catch (e) {
       debugPrint('Error creating user: $e');
