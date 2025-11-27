@@ -13,6 +13,7 @@ class UpdateUserProfileScreen extends ConsumerStatefulWidget {
 
 class _UpdateUserProfileState extends ConsumerState<UpdateUserProfileScreen> {
   final _title = 'User Profile';
+  bool _hasPrefilled = false;
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _usernameController = TextEditingController();
@@ -21,6 +22,10 @@ class _UpdateUserProfileState extends ConsumerState<UpdateUserProfileScreen> {
   @override
   void initState() {
     super.initState();
+
+    // We need to only activate the save if username isn't an
+    // empty string the phone needs to consantly be aware of the
+    // value in this controller
     _usernameController.addListener(() {
       setState(() {}); // Triggers rebuild as user types
     });
@@ -29,10 +34,17 @@ class _UpdateUserProfileState extends ConsumerState<UpdateUserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(userProfileNotifierProvider);
-    _emailController.text = userState.data?.email ?? '';
-    _firstNameController.text = userState.data?.firstName ?? '';
-    _lastNameController.text = userState.data?.lastName ?? '';
-    _usernameController.text = userState.data?.username ?? '';
+
+    // Only prefill one time
+    if (!_hasPrefilled) {
+      if (userState.data != null) {
+        _emailController.text = userState.data?.email ?? '';
+        _firstNameController.text = userState.data?.firstName ?? '';
+        _lastNameController.text = userState.data?.lastName ?? '';
+        _usernameController.text = userState.data?.username ?? '';
+        _hasPrefilled = true;
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -79,7 +91,6 @@ class _UpdateUserProfileState extends ConsumerState<UpdateUserProfileScreen> {
                       ref
                           .read(userProfileNotifierProvider.notifier)
                           .update(
-                            email: _emailController.text, // use a guarnteed value
                             username: _usernameController.text,
                             firstName: _firstNameController.text,
                             lastName: _lastNameController.text,

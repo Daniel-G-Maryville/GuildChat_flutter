@@ -1,23 +1,36 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/foundation.dart'; // Provides debugPrint
 import 'package:guild_chat/data/user_repository.dart'; // Your repo
 import 'package:guild_chat/models/data_state.dart';
-import 'package:guild_chat/models/user.dart'; // Your User model
+import 'package:guild_chat/models/user_profile.dart'; // Your User model
 import 'package:guild_chat/ui/login/login_provider.dart'; // For authNotifierProvider
 
-final userByEmailProvider = FutureProvider.autoDispose<Guild?>((ref) async {
-  final email = ref.watch(authEmailProvider).value;
+final userByEmailProvider = FutureProvider.autoDispose<UserProfile?>((
+  ref,
+) async {
+  final email = ref.watch(authServiceProvider).email;
+  debugPrint("Email: $email");
 
-  return await UserRepository.getUserByEmail(email!); // Await here
+  if (email == null) return null;
+
+  return await UserRepository.getUserByEmail(email); // Await here
 });
 
-final authEmailProvider = FutureProvider.autoDispose<String?>((ref) async {
-  return ref.watch(authNotifierProvider).email;
-});
+class UserProfileService {
 
-class UserProfileNotifier extends Notifier<DataState<Guild>> {
+}
+
+class UserProfileNotifier extends Notifier<DataState<UserProfile>> {
   @override
-  DataState<Guild> build() {
-    return DataState<Guild>.initalize();
+  DataState<UserProfile> build() {
+    final asyncUser = ref.watch(userByEmailProvider);
+    debugPrint("User data $asyncUser");
+    return asyncUser.when(
+      data: (user) =>
+          user != null ? DataState.success(user) : DataState.initalize(),
+      loading: () => DataState.loading(),
+      error: (err, stack) => DataState.error(err.toString()),
+    );
   }
 
   Future<void> create({
@@ -26,10 +39,10 @@ class UserProfileNotifier extends Notifier<DataState<Guild>> {
     String lastName = '',
     String username = '',
   }) async {
-    state = DataState<Guild>.loading();
+    state = DataState<UserProfile>.loading();
 
     try {
-      Guild? userProfile = ref.watch(userByEmailProvider).value;
+      UserProfile? userProfile = ref.watch(userByEmailProvider).value;
       if (userProfile != null) {
         state = DataState.error("User already exists");
       } else {
@@ -45,32 +58,33 @@ class UserProfileNotifier extends Notifier<DataState<Guild>> {
         }
       }
     } catch (e) {
-      state = DataState<Guild>.error(e.toString());
+      state = DataState<UserProfile>.error(e.toString());
     }
   }
 
   Future<void> update({
-    String email = '',
     String firstName = '',
     String lastName = '',
     String username = '',
   }) async {
-    state = DataState<Guild>.loading();
+    String? email = state.data?.email;
+    state = DataState<UserProfile>.loading(data: state.data);
+    debugPrint(
+      "Updating with\nemail: $email, firstName: $firstName, lastName: $lastName, username: $username ",
+    );
 
     try {
-      Guild? userProfile = ref.watch(userByEmailProvider).value;
-      if (userProfile != null) {
-        state = DataState.error("User already exists");
-      } else {
-        await UserRepository.update(
-          email: email,
-          firstName: firstName,
-          lastName: lastName,
-          username: username,
-        );
-      }
+      await UserRepository.update(
+        email: email!,
+        firstName: firstName,
+        lastName: lastName,
+        username: username,
+      );
+      // Refetch the user
+      final userProfile = await UserRepository.getUserByEmail(email);
+      state = DataState.success(userProfile!);
     } catch (e) {
-      state = DataState<Guild>.error(e.toString());
+      state = DataState<UserProfile>.error(e.toString(), data: state.data);
     }
   }
 
@@ -78,6 +92,6 @@ class UserProfileNotifier extends Notifier<DataState<Guild>> {
 }
 
 final userProfileNotifierProvider =
-    NotifierProvider<UserProfileNotifier, DataState<Guild>>(
-      () => UserProfileNotifier(),
-    );
+  NotifierProvider<UserProfileNotifier, DataState<UserProfile>>(
+    () => UserProfileNotifier(),
+  );

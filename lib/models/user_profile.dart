@@ -1,4 +1,4 @@
-class Guild {
+class UserProfile {
   final String username;
   final String email;
   final String firstName;
@@ -6,7 +6,7 @@ class Guild {
   final List<String> guilds;
 
   // Constructor for creating a new User
-  Guild({
+  UserProfile({
     this.username = '',
     this.firstName = '',
     this.lastName = '',
@@ -15,13 +15,13 @@ class Guild {
   });
 
   // Factory constructor to create User from Firestore document
-  factory Guild.fromMap(Map<String, dynamic> map, String id) {
-    return Guild(
-      username: map['username'],
-      firstName: map['firstName'],
-      lastName: map['lastName'],
-      email: map['email'],
-      guilds: map['guilds'],
+  factory UserProfile.fromMap(Map<String, dynamic> map, String id) {
+    return UserProfile(
+      username: map['username'] ?? '',
+      firstName: map['firstName'] ?? '',
+      lastName: map['lastName'] ?? '',
+      email: map['email'] ?? '',
+      guilds: List<String>.from(map['guilds'] ?? []),
     );
   }
 

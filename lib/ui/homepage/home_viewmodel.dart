@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 //import 'package:guild_chat/models/user.dart'; // Uncomment when needed
 
 class HomeViewmodel extends ChangeNotifier {

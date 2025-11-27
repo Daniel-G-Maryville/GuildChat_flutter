@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:guild_chat/ui/login/login_provider.dart';
 import 'package:guild_chat/ui/homepage/home_viewmodel.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({
-    super.key,
-    required this.title,
-    required this.viewModel,
-  });
+class HomeScreen extends ConsumerStatefulWidget {
+  const HomeScreen({super.key, required this.title, required this.viewModel});
 
   final String title;
   //holds the home_viewmodel data
   final HomeViewmodel viewModel;
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
@@ -38,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.read(authServiceProvider).checkSession(); // Make sure logged in
     return Scaffold(
       //creates top bar with navigation
       appBar: AppBar(
@@ -51,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               context.push('/user_profile/a@a.com');
             },
-          )
+          ),
         ],
       ),
       body: Center(

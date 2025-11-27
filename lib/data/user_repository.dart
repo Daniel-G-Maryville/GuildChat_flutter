@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:guild_chat/models/user.dart'; // Import the model
+import 'package:guild_chat/models/user_profile.dart'; // Import the model
 
 // Assuming db is a global or injected Firestore instance
 final db = FirebaseFirestore.instance;
@@ -9,11 +9,11 @@ final guildCollection = 'guilds';
 
 class UserRepository {
   // Get a user by email (document ID assumed to be email)
-  static Future<Guild?> getUserByEmail(String email) async {
+  static Future<UserProfile?> getUserByEmail(String email) async {
     try {
       final docSnapshot = await db.collection(collection).doc(email).get();
       if (docSnapshot.exists) {
-        return Guild.fromMap(docSnapshot.data()!, docSnapshot.id);
+        return UserProfile.fromMap(docSnapshot.data()!, docSnapshot.id);
       }
     } catch (e) {
       debugPrint('Error getting user by email: $e');
@@ -22,11 +22,11 @@ class UserRepository {
   }
 
   // Get all users from Firestore
-  static Future<List<Guild>> getAllUsers() async {
+  static Future<List<UserProfile>> getAllUsers() async {
     try {
       final querySnapshot = await db.collection(collection).get();
       return querySnapshot.docs.map((doc) {
-        return Guild.fromMap(doc.data(), doc.id);
+        return UserProfile.fromMap(doc.data(), doc.id);
       }).toList();
     } catch (e) {
       debugPrint('Error getting users: $e');
@@ -34,8 +34,8 @@ class UserRepository {
     }
   }
 
-  // Create a new user in Firestore (using email as document ID)
-  static Future<Guild?> create({
+  // Create a new userProfile in Firestore (using email as document ID)
+  static Future<UserProfile?> create({
     String email = '',
     String username = '',
     String firstName = '',
@@ -43,14 +43,16 @@ class UserRepository {
     List<String> guilds = const [],
   }) async {
     try {
-      final newUser = Guild(
+      final newUser = UserProfile(
         username: username.trim(),
         firstName: firstName.trim(),
         lastName: lastName.trim(),
         email: email.toLowerCase().trim(),
         guilds: guilds,
       );
+      debugPrint("Trying to create the UserProfile: $newUser");
       await db.collection(collection).doc(email).set(newUser.toMap());
+      debugPrint("Created new UserProfile");
       return newUser;
     } catch (e) {
       debugPrint('Error creating user: $e');
@@ -76,9 +78,9 @@ class UserRepository {
   }) async {
     try {
       await db.collection(collection).doc(email).update({
-        username: username,
-        firstName: firstName,
-        lastName: lastName,
+        'firstName': firstName.trim(),
+        'username': username.trim(),
+        'lastName': lastName.trim(),
       });
       return true;
     } catch (e) {

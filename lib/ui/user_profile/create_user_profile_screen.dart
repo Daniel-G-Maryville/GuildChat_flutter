@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:guild_chat/ui/login/login_provider.dart';
 import 'package:guild_chat/ui/user_profile/user_profile_provider.dart';
 
 class CreateUserProfileScreen extends ConsumerStatefulWidget {
@@ -28,17 +29,9 @@ class _CreateUserProfileState extends ConsumerState<CreateUserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final email = ref.watch(authEmailProvider).value;
+    final email = ref.watch(authServiceProvider).email;
     final userState = ref.watch(userProfileNotifierProvider);
     _emailController.text = email!;
-
-    // if (userState.data != null) {
-    //   WidgetsBinding.instance.addPersistentFrameCallback((_) {
-    //     if (mounted) {
-    //       context.go('/home');
-    //     }
-    //   });
-    // }
 
     return Scaffold(
       appBar: AppBar(
