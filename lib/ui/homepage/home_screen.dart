@@ -2,40 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:guild_chat/ui/login/login_provider.dart';
-import 'package:guild_chat/ui/homepage/home_viewmodel.dart';
+import 'package:guild_chat/ui/homepage/home_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({super.key, required this.title, required this.viewModel});
-
-  final String title;
-  //holds the home_viewmodel data
-  final HomeViewmodel viewModel;
+  const HomeScreen({super.key});
 
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
+  final title = 'Guild Chat';
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
-  void initState() {
-    super.initState();
-    widget.viewModel.addListener(_updateUI);
-  }
-
-  @override
-  void dispose() {
-    widget.viewModel.removeListener(_updateUI);
-    super.dispose();
-  }
-
-  void _updateUI() {
-    if (mounted) {
-      setState(() {});
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final homeState = ref.watch(homeScreenProvider);
     ref.read(authServiceProvider).checkSession(); // Make sure logged in
     return Scaffold(
       //creates top bar with navigation
@@ -47,6 +27,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           //settings button to transfer to user settings
           IconButton(
             icon: const Icon(Icons.settings),
+            // TODO: This is still hardcoded, fix this
             onPressed: () {
               context.push('/user_profile/a@a.com');
             },
@@ -60,7 +41,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           children: <Widget>[
             Expanded(
               child: ListView(
-                children: widget.viewModel.userGuilds.map((guildName) {
+                children: homeState.userGuilds.map((guildName) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16.0,
