@@ -2,12 +2,14 @@ class Guild {
   final String guildName;
   final List<String> members; // list of member ids
   final String ownerId;
+  final String channelId; // The id of the chat channel
 
   // Constructor for creating a new Guild
   Guild({
     this.guildName = '',
     this.members = const [],
     this.ownerId = '',
+    this.channelId = '',
   });
 
   // Factory constructor to create Guild from Firestore document
@@ -15,16 +17,16 @@ class Guild {
     return Guild(
       guildName: map['guildName'],
       ownerId: map['ownerId'],
-      members: (map['members'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
-   );
+      members:
+          (map['members'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
+    );
   }
 
   // Convert Guild to a map for Firestore
   Map<String, dynamic> toMap() {
-    return {
-      'guildName': guildName,
-      'members': members,
-      'ownerId': ownerId,
-    };
+    return {'guildName': guildName, 'members': members, 'ownerId': ownerId};
   }
 }

@@ -4,11 +4,11 @@ import 'package:guild_chat/models/guild.dart'; // Import the model
 
 // Assuming db is a global or injected Firestore instance
 final db = FirebaseFirestore.instance;
-final collection = 'guild';
+final collection = 'guilds';
 final memberCollection = 'members';
 
 class GuildRepository {
-  // Get a guild by name (document ID assumed to be email)
+  // Get a guild by name (document ID assumed to be Guild Name)
   static Future<Guild?> getGuildByName(String name) async {
     try {
       final docSnapshot = await db.collection(collection).doc(name).get();
@@ -34,7 +34,7 @@ class GuildRepository {
     }
   }
 
-  // Create a new guild in Firestore (using email as document ID)
+  // Create a new guild in Firestore
   static Future<Guild?> create({
     String guildName = '',
     String ownerId = '',
