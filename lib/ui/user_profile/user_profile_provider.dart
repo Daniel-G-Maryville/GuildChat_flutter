@@ -49,7 +49,7 @@ class UserProfileNotifier extends Notifier<DataState<UserProfile>> {
           username: username,
         );
         if (userProfile != null) {
-          state = DataState.success(userProfile);
+          state = DataState<UserProfile>.success(userProfile);
           ref.read(authNotifierProvider.notifier).userCreated();
         }
       }
@@ -88,6 +88,6 @@ class UserProfileNotifier extends Notifier<DataState<UserProfile>> {
 }
 
 final userProfileNotifierProvider =
-  NotifierProvider<UserProfileNotifier, DataState<UserProfile>>(
-    () => UserProfileNotifier(),
-  );
+    NotifierProvider<UserProfileNotifier, DataState<UserProfile>>(
+      () => UserProfileNotifier(),
+    );
