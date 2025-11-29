@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
-import 'package:guild_chat/models/user_profile.dart';
 import 'package:guild_chat/models/guild.dart';
 import 'package:guild_chat/models/data_state.dart';
 import 'package:guild_chat/data/guild_repository.dart';
@@ -32,7 +31,7 @@ class GuildViewmodel extends ChangeNotifier {
 class GuildNotifier extends Notifier<DataState<Guild>> {
   // First we set the the state, we will update this later so that we can
   // appropriately get a guild here. That way we will be able to
-  // properly include an update function
+  // properly include a delete function
   @override
   DataState<Guild> build() {
     return DataState.initalize();
@@ -43,7 +42,7 @@ class GuildNotifier extends Notifier<DataState<Guild>> {
   // We will add some providers above to get specicfic data we aren't
   // trying to mutate later
   Future<void> create({String name = '', String owner = ''}) async {
-    state = DataState.loading();
+  state = DataState<Guild>.loading();
 
     try {
       Guild? guild = await GuildRepository.create(
@@ -53,7 +52,7 @@ class GuildNotifier extends Notifier<DataState<Guild>> {
       if (guild != null) state = DataState<Guild>.success(guild);
 
       // Here we have to use the ?. operator because it is possible
-      // for giuldname to be null, though that should never be the
+      // for guildname to be null, though that should never be the
       // case here
       debugPrint("Created Guild with name: ${guild?.guildName}");
     } catch (e) {
@@ -62,17 +61,23 @@ class GuildNotifier extends Notifier<DataState<Guild>> {
   }
 
   // TODO write an add user function
+  // This will add a user to the list of users that subscribe to the guild
   // Future<void> addUser(String userId) {
 
   // }
   //
 
   // TODO write a remove user function
+  // For when a user wants to leave a guild
   // Future<void> removeUser(String userId) {
 
   // }
 
   // TODO write a delete guild function
+  // To complete burn a guild down, not a function we want to consider
+  // To do this properly, we need to modify each user so the guild
+  // no longer shows up for them, this is a big advantage of using a
+  // guild_user table for this
   // Future<void> delete(String userId) {
 
   // }

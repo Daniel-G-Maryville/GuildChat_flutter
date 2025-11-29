@@ -1,35 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:guild_chat/ui/guild/guild_viewmodel.dart';
 
-class CreateGuildScreen extends StatefulWidget {
-  const CreateGuildScreen({
-    super.key,
-    required this.title,
-  });
-
-  final String title;
+class CreateGuildScreen extends ConsumerStatefulWidget {
+  const CreateGuildScreen({super.key});
 
   @override
-  State<CreateGuildScreen> createState() => _CreateGuildScreenState();
+  ConsumerState<CreateGuildScreen> createState() => _CreateGuildScreenState();
 }
 
-class _CreateGuildScreenState extends State<CreateGuildScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
+class _CreateGuildScreenState extends ConsumerState<CreateGuildScreen> {
+  final _title = "Create Guild";
   final _guildNameController = TextEditingController();
   final _guildDescriptionController = TextEditingController();
 
   //top navigation pannel construction
   @override
   Widget build(BuildContext context) {
+    final guild = ref.watch()
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -39,7 +28,7 @@ class _CreateGuildScreenState extends State<CreateGuildScreen> {
             context.pop();
           },
         ),
-        title: Text(widget.title),
+        title: Text(_title),
         centerTitle: true,
       ),
       body: Center(
