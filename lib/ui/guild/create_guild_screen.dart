@@ -24,30 +24,6 @@ class _CreateGuildScreenState extends ConsumerState<CreateGuildScreen> {
   @override
   Widget build(BuildContext context) {
 
-    // Listen to the guild creation state for showing snackbars and navigation
-    /*ref.listen<DataState<Guild>>(guildViewModelProvider, (_, state) {
-      state.maybeWhen(
-        success: (guild) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                  content:
-                      Text('Guild "${guild.guildName}" created successfully!')),
-            );
-          context.pop();
-        },
-        error: (error) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text('Error creating guild: $error')),
-            );
-        },
-        orElse: () {},
-      );
-    });*/
-
     //gets the user email from user data
     final userData = ref.watch(userProfileProvider);
     final userEmail = userData.userEmail;
