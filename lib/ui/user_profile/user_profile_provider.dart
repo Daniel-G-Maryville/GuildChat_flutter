@@ -67,7 +67,7 @@ class UserProfileNotifier extends Notifier<DataState<UserProfile>> {
     state = DataState<UserProfile>.loading(data: state.data);
     debugPrint(
       "Updating with\nemail: $email, firstName: $firstName, lastName: $lastName, username: $username ",
-    );
+    );    
 
     try {
       await UserRepository.update(
@@ -83,6 +83,21 @@ class UserProfileNotifier extends Notifier<DataState<UserProfile>> {
       state = DataState<UserProfile>.error(e.toString(), data: state.data);
     }
   }
+
+  Future<void> addGuildToProfile(String guildId) async {
+    final userEmail = state.data?.email;
+    if (userEmail == null) return;
+
+    try {
+      await UserRepository.addGuild(userEmail, guildId);
+      final updatedProfile = await UserRepository.getUserByEmail(userEmail);
+      if (updatedProfile != null) {
+        state = DataState.success(updatedProfile);
+      }
+    } catch (e) {
+      debugPrint("Error adding guild to profile: $e");
+    }
+  }  
 
   void clearError() => state = DataState.initalize();
 }

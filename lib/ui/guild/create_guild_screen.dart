@@ -13,12 +13,45 @@ class CreateGuildScreen extends ConsumerStatefulWidget {
 class _CreateGuildScreenState extends ConsumerState<CreateGuildScreen> {
   final _title = "Create Guild";
   final _guildNameController = TextEditingController();
-  final _guildDescriptionController = TextEditingController();
+
+  @override
+  void dispose() {
+    _guildNameController.dispose();
+    super.dispose();
+  }
 
   //top navigation pannel construction
   @override
   Widget build(BuildContext context) {
-    final guild = ref.watch()
+
+    // Listen to the guild creation state for showing snackbars and navigation
+    /*ref.listen<DataState<Guild>>(guildViewModelProvider, (_, state) {
+      state.maybeWhen(
+        success: (guild) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                  content:
+                      Text('Guild "${guild.guildName}" created successfully!')),
+            );
+          context.pop();
+        },
+        error: (error) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(content: Text('Error creating guild: $error')),
+            );
+        },
+        orElse: () {},
+      );
+    });*/
+
+    //gets the user email from user data
+    final userData = ref.watch(userProfileProvider);
+    final userEmail = userData.userEmail;
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -32,32 +65,47 @@ class _CreateGuildScreenState extends ConsumerState<CreateGuildScreen> {
         centerTitle: true,
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          //this holds the textboxes and button to later control the creation of a guild
-          children: [
-            TextField(
-              controller: _guildNameController,
-              decoration: const InputDecoration(labelText: 'Guild Name'),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: _guildDescriptionController,
-              decoration: const InputDecoration(labelText: 'Description'),
-            ),
-            const SizedBox(height: 60),
-            ElevatedButton(
-              onPressed: () {
-                //replace with actual guild creation logic in the future
-              ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Create ${_guildNameController.text} guild')),
-                        );
-              },
-              child: const Text('Create Guild'),
-            ),
-          ]
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextField(
+                  controller: _guildNameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Guild Name',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 40),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 50), // make button wider
+                  ),
+                  onPressed:
+                    () {
+                          //prevent guild creation without name
+                          if (_guildNameController.text.isEmpty) {
+                             ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Please enter a guild name.')),
+                            );
+                            return;
+                          }
+                          //create guild based on name and user email
+                          ref.read(guildViewModelProvider.notifier).create(
+                                name: _guildNameController.text,
+                                owner: userEmail,
+                              );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Guild Created.')),
+                            );
+                        }, child: const Text('Create Guild'),
+                ),
+              ]),        
         ),
-      ),
+      )
     );
   }
 }
