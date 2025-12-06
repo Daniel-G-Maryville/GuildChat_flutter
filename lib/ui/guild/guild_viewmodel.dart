@@ -90,3 +90,7 @@ class GuildNotifier extends Notifier<DataState<Guild>> {
 
   // }
 }
+
+final guildNotifierProvider = NotifierProvider<GuildNotifier, DataState<Guild>>(
+  () => GuildNotifier(),
+);

@@ -84,6 +84,21 @@ class UserProfileNotifier extends Notifier<DataState<UserProfile>> {
     }
   }
 
+  Future<void> addGuild(String guildName) async {
+    try {
+      String? email = state.data?.email;
+      if (email != null) {
+        await UserRepository.addGuild(email, guildName);
+        final userProfile = await UserRepository.getUserByEmail(email);
+        state = DataState.success(userProfile!);
+      } else {
+        throw Exception("Something went wrong!");
+      }
+    } catch (e) {
+      state = DataState<UserProfile>.error(e.toString(), data: state.data);
+    }
+  }
+
   void clearError() => state = DataState.initalize();
 }
 

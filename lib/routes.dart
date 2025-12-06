@@ -62,23 +62,25 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/guild',
-        builder: (context, state) => GuildScreen(title: title, viewModel: GuildViewmodel()), 
+        builder: (context, state) =>
+            GuildScreen(title: title, viewModel: GuildViewmodel()),
       ),
       GoRoute(
         path: '/chat',
-        builder: (context, state) => ChatScreen(title: title, viewModel: ChatViewmodel()), 
+        builder: (context, state) =>
+            ChatScreen(title: title, viewModel: ChatViewmodel()),
       ),
       GoRoute(
         path: '/guild/create',
-        builder: (context, state) => CreateGuildScreen(title: title), 
+        builder: (context, state) => CreateGuildScreen(),
       ),
       GoRoute(
         path: '/guild/update',
-        builder: (context, state) => UpdateGuildScreen(title: title), 
+        builder: (context, state) => UpdateGuildScreen(title: title),
       ),
       GoRoute(
         path: '/guild/find',
-        builder: (context, state) => FindGuildScreen(title: title), 
+        builder: (context, state) => FindGuildScreen(title: title),
       ),
     ],
   );
