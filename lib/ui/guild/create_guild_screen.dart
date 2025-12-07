@@ -25,7 +25,12 @@ class _CreateGuildScreenState extends ConsumerState<CreateGuildScreen> {
   final _title =
       "Create Guild"; // Here we just moved this to here so we aren't having to set that elsewhere
   final _guildNameController = TextEditingController();
-  final _guildDescriptionController = TextEditingController();
+
+  @override
+  void dispose() {
+    _guildNameController.dispose();
+    super.dispose();
+  }
 
   // here we need to add a listener to the guild name controller. This is required
   // because we don't want someone to be able to click save with no name written.
@@ -85,7 +90,7 @@ class _CreateGuildScreenState extends ConsumerState<CreateGuildScreen> {
             ),
           ],
         ),
-      ),
+      )
     );
   }
 }

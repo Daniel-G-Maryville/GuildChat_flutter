@@ -67,7 +67,7 @@ class UserProfileNotifier extends Notifier<DataState<UserProfile>> {
     state = DataState<UserProfile>.loading(data: state.data);
     debugPrint(
       "Updating with\nemail: $email, firstName: $firstName, lastName: $lastName, username: $username ",
-    );
+    );    
 
     try {
       await UserRepository.update(

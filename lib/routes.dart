@@ -74,7 +74,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/guild/create',
-        builder: (context, state) => CreateGuildScreen(),
+        builder: (context, state) => CreateGuildScreen(), 
       ),
       GoRoute(
         path: '/guild/update',

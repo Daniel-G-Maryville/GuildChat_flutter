@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:guild_chat/models/guild.dart';
 import 'package:guild_chat/models/data_state.dart';
 import 'package:guild_chat/data/guild_repository.dart';
+import 'package:guild_chat/ui/user_profile/user_profile_provider.dart';
 
 class GuildViewmodel extends ChangeNotifier {
   // A mock list of chats in the guild
@@ -23,6 +24,9 @@ class GuildViewmodel extends ChangeNotifier {
     notifyListeners();
   }
 }
+
+//added guildViewModelProvider to allow functionality for creating guild
+final guildViewModelProvider = NotifierProvider<GuildNotifier, DataState<Guild>>(GuildNotifier.new);
 
 // I"m going to try to comment the shit out of this.
 // This is the guild notifier class. Notifiers are a
@@ -49,12 +53,20 @@ class GuildNotifier extends Notifier<DataState<Guild>> {
         guildName: name,
         ownerId: owner,
       );
-      if (guild != null) state = DataState<Guild>.success(guild);
+      if (guild != null) {
+        // 2. Add the created guild to the user's profile
+        // We use ref.read here because we are calling a method on another provider
+        // without listening to its state changes directly in this method.
+        await ref.read(userProfileNotifierProvider.notifier).addGuildToProfile(guild.guildName);
+        
+        // 3. Set the final state to success
+        state = DataState<Guild>.success(guild);
+        debugPrint("Created Guild with name: ${guild.guildName} and added to user profile.");
 
-      // Here we have to use the ?. operator because it is possible
-      // for guildname to be null, though that should never be the
-      // case here
-      debugPrint("Created Guild with name: ${guild?.guildName}");
+      } else {
+        throw Exception("Guild creation returned null.");
+      }
+
     } catch (e) {
       state = DataState<Guild>.error(e.toString());
     }
