@@ -103,18 +103,6 @@ class GuildNotifier extends Notifier<DataState<Guild>> {
   // }
 }
 
-class UserData {
-  const UserData(this.userData);
-
-  // Declare as dynamic this ultimately will resolve to DataState<UserProfile>
-  final dynamic userData;
-
-  String get userEmail => userData.data?.email;
-  List<String> get userGuilds => List.unmodifiable(userData.data?.guilds);
-}
-
-final userProfileProvider = Provider<UserData>((ref) {
-  final userProfile = ref.watch(userProfileNotifierProvider);
-  return UserData(userProfile);
-});
-
+final guildNotifierProvider = NotifierProvider<GuildNotifier, DataState<Guild>>(
+  () => GuildNotifier(),
+);
