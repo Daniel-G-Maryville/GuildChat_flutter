@@ -14,6 +14,7 @@ import 'package:guild_chat/ui/chat/chat_viewmodel.dart';
 import 'package:guild_chat/ui/guild/create_guild_screen.dart';
 import 'package:guild_chat/ui/guild/update_guild_screen.dart';
 import 'package:guild_chat/ui/guild/find_guild_screen.dart';
+// import 'package:guild_chat/ui/core/widgets/chat_test.dart';
 
 final String title = 'Guild Chat';
 
@@ -52,6 +53,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/splash', builder: (context, state) => SplashScreen()),
       GoRoute(path: '/login', builder: (context, state) => LoginScreen()),
       GoRoute(path: '/home', builder: (context, state) => HomeScreen()),
+      // GoRoute(path: '/test', builder: (context, state) => ChatDemo()),
       GoRoute(
         path: '/user_profile/create',
         builder: (context, state) => CreateUserProfileScreen(),
