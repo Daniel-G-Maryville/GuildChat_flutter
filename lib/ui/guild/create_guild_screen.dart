@@ -25,6 +25,7 @@ class _CreateGuildScreenState extends ConsumerState<CreateGuildScreen> {
   final _title =
       "Create Guild"; // Here we just moved this to here so we aren't having to set that elsewhere
   final _guildNameController = TextEditingController();
+  final _guildDescriptionController = TextEditingController();
 
   @override
   void dispose() {

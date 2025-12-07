@@ -57,7 +57,7 @@ class GuildNotifier extends Notifier<DataState<Guild>> {
         // 2. Add the created guild to the user's profile
         // We use ref.read here because we are calling a method on another provider
         // without listening to its state changes directly in this method.
-        await ref.read(userProfileNotifierProvider.notifier).addGuildToProfile(guild.guildName);
+        await ref.read(userProfileNotifierProvider.notifier).addGuild(guild.guildName);
         
         // 3. Set the final state to success
         state = DataState<Guild>.success(guild);
