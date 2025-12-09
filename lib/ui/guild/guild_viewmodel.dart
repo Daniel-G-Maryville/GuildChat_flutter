@@ -66,7 +66,11 @@ class GuildNotifier extends Notifier<DataState<Guild>> {
             .read(userProfileNotifierProvider.notifier)
             .addGuild(guild.guildName);
 
-        // 3. Set the final state to success
+        // 3. Add the owner to the guilds members
+        // This should be moved to a provider
+        GuildRepository.addMember(name, owner);
+
+        // 4. Set the final state to success
         state = DataState<Guild>.success(guild);
         debugPrint(
           "Created Guild with name: ${guild.guildName} and added to user profile.",

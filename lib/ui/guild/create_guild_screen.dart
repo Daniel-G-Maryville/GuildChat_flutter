@@ -78,20 +78,23 @@ class _CreateGuildScreenState extends ConsumerState<CreateGuildScreen> {
             ElevatedButton(
               onPressed: _guildNameController.text == ''
                   ? null
-                  : () => ref
-                        .read(guildNotifierProvider.notifier)
-                        .create(
-                          name: _guildNameController.text,
-                          // Here we force the email issue. We assume we are logged in
-                          // This is likely a bad solution that will cause problems
-                          // in the future. Hopefully that future is after this class
-                          owner: ref.watch(authServiceProvider).email!,
-                        ),
+                  : () {
+                      ref
+                          .read(guildNotifierProvider.notifier)
+                          .create(
+                            name: _guildNameController.text,
+                            // Here we force the email issue. We assume we are logged in
+                            // This is likely a bad solution that will cause problems
+                            // in the future. Hopefully that future is after this class
+                            owner: ref.watch(authServiceProvider).email!,
+                          );
+                      context.pop(); // Go back to previous screen
+                    },
               child: const Text('Create Guild'),
             ),
           ],
         ),
-      )
+      ),
     );
   }
 }
