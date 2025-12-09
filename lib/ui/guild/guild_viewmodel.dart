@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:guild_chat/models/guild.dart';
 import 'package:guild_chat/models/data_state.dart';
 import 'package:guild_chat/data/guild_repository.dart';
+import 'package:guild_chat/ui/chat/chat_viewmodel.dart';
 import 'package:guild_chat/ui/user_profile/user_profile_provider.dart';
 
 class GuildViewmodel extends ChangeNotifier {
@@ -26,7 +27,8 @@ class GuildViewmodel extends ChangeNotifier {
 }
 
 //added guildViewModelProvider to allow functionality for creating guild
-final guildViewModelProvider = NotifierProvider<GuildNotifier, DataState<Guild>>(GuildNotifier.new);
+final guildViewModelProvider =
+    NotifierProvider<GuildNotifier, DataState<Guild>>(GuildNotifier.new);
 
 // I"m going to try to comment the shit out of this.
 // This is the guild notifier class. Notifiers are a
@@ -46,7 +48,7 @@ class GuildNotifier extends Notifier<DataState<Guild>> {
   // We will add some providers above to get specicfic data we aren't
   // trying to mutate later
   Future<void> create({String name = '', String owner = ''}) async {
-  state = DataState<Guild>.loading();
+    state = DataState<Guild>.loading();
 
     try {
       Guild? guild = await GuildRepository.create(
@@ -54,19 +56,24 @@ class GuildNotifier extends Notifier<DataState<Guild>> {
         ownerId: owner,
       );
       if (guild != null) {
+        // 1. Create the main chant channel
+        final chatCreated = ref.read(createChatChannelProvider(name));
+
         // 2. Add the created guild to the user's profile
         // We use ref.read here because we are calling a method on another provider
         // without listening to its state changes directly in this method.
-        await ref.read(userProfileNotifierProvider.notifier).addGuild(guild.guildName);
-        
+        await ref
+            .read(userProfileNotifierProvider.notifier)
+            .addGuild(guild.guildName);
+
         // 3. Set the final state to success
         state = DataState<Guild>.success(guild);
-        debugPrint("Created Guild with name: ${guild.guildName} and added to user profile.");
-
+        debugPrint(
+          "Created Guild with name: ${guild.guildName} and added to user profile.",
+        );
       } else {
         throw Exception("Guild creation returned null.");
       }
-
     } catch (e) {
       state = DataState<Guild>.error(e.toString());
     }
