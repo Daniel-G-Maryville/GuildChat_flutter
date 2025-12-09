@@ -1,5 +1,12 @@
 import 'package:flutter/foundation.dart';
-//import 'package:guild_chat/models/user.dart'; // Uncomment when needed
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:guild_chat/data/chat_message_repository.dart';
+
+final createChatChannelProvider = FutureProvider.autoDispose.family<bool, String>(
+  (ref, guildName) async {
+  final chatRepo = ChatMessageRepository();
+  return await chatRepo.createChannel(guildName);
+});
 
 class ChatViewmodel extends ChangeNotifier {
   // A mock list of messages in the chat
