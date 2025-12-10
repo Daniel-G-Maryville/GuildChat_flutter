@@ -1,44 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:guild_chat/ui/guild/guild_viewmodel.dart';
 
-class GuildScreen extends StatefulWidget {
-  const GuildScreen({
-    super.key,
-    //title likely to be switched to guild name in future
-    required this.title,
-    required this.viewModel,
-  });
-
-  final String title;
-  //this contains the guild_viewmodel data
-  final GuildViewmodel viewModel;
+class GuildScreen extends ConsumerStatefulWidget {
+  const GuildScreen({super.key});
 
   @override
-  State<GuildScreen> createState() => _GuildScreenState();
+  ConsumerState<GuildScreen> createState() => _GuildScreenState();
 }
 
-class _GuildScreenState extends State<GuildScreen> {
-  @override
-  void initState() {
-    super.initState();
-    widget.viewModel.addListener(_updateUI);
-  }
-
-  @override
-  void dispose() {
-    widget.viewModel.removeListener(_updateUI);
-    super.dispose();
-  }
-
-  void _updateUI() {
-    if (mounted) {
-      setState(() {});
-    }
-  }
+class _GuildScreenState extends ConsumerState<GuildScreen> {
   //this creates the top navigation pannel
   @override
   Widget build(BuildContext context) {
+    final guildState = ref.watch(guildNotifierProvider);
+    final guildName = guildState.data?.guildName;
+    // final channels = 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -48,7 +26,7 @@ class _GuildScreenState extends State<GuildScreen> {
             context.pop();
           },
         ),
-        title: Text(widget.title),
+        title: Text(guildName ?? "Unknown"),
         centerTitle: true,
         actions: [
           IconButton(

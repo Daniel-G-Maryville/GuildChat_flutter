@@ -6,29 +6,13 @@ import 'package:guild_chat/data/guild_repository.dart';
 import 'package:guild_chat/ui/chat/chat_viewmodel.dart';
 import 'package:guild_chat/ui/user_profile/user_profile_provider.dart';
 
-class GuildViewmodel extends ChangeNotifier {
-  // A mock list of chats in the guild
-  // Later, this would be fetched from your database.
-  final List<String> _guildChats = [
-    'Newcomers',
-    'Bombers',
-    'Runners',
-    'Testers',
-  ];
-
-  List<String> get guildChats => List.unmodifiable(_guildChats);
-
-  // Example method to update guilds (e.g., from DB)
-  Future<void> loadChats() async {
-    // Simulate fetching from DB
-    // _guildChats = await fetchChatsFromDB();
-    notifyListeners();
-  }
-}
-
 //added guildViewModelProvider to allow functionality for creating guild
-final guildViewModelProvider =
-    NotifierProvider<GuildNotifier, DataState<Guild>>(GuildNotifier.new);
+
+final channelProvider = FutureProvider.autoDispose.family<String, String>(
+  (guildName, channel) {
+    
+  },
+);
 
 // I"m going to try to comment the shit out of this.
 // This is the guild notifier class. Notifiers are a
@@ -83,7 +67,6 @@ class GuildNotifier extends Notifier<DataState<Guild>> {
     }
   }
 
-  // TODO write an add user function
   // This will add a user to the list of users that subscribe to the guild
   Future<void> addUser(String guildName, String userId) async {
     try {
