@@ -85,9 +85,13 @@ class GuildNotifier extends Notifier<DataState<Guild>> {
 
   // TODO write an add user function
   // This will add a user to the list of users that subscribe to the guild
-  // Future<void> addUser(String userId) {
-
-  // }
+  Future<void> addUser(String guildName, String userId) async {
+    try {
+      GuildRepository.addMember(guildName, userId);
+    } catch (e) {
+      state = DataState<Guild>.error("Error: $e");
+    }
+  }
   //
 
   // TODO write a remove user function
