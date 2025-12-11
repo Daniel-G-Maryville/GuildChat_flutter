@@ -10,10 +10,7 @@ class GuildViewmodel extends ChangeNotifier {
   // A mock list of chats in the guild
   // Later, this would be fetched from your database.
   final List<String> _guildChats = [
-    'Newcomers',
-    'Bombers',
-    'Runners',
-    'Testers',
+    'main_chat'
   ];
 
   List<String> get guildChats => List.unmodifiable(_guildChats);

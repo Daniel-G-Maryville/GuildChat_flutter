@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:guild_chat/ui/guild/guild_viewmodel.dart';
 
-class GuildScreen extends StatefulWidget {
+class GuildScreen extends ConsumerStatefulWidget {
   const GuildScreen({
     super.key,
-    //title likely to be switched to guild name in future
-    required this.title,
+    required this.guildName,
     required this.viewModel,
   });
 
-  final String title;
-  //this contains the guild_viewmodel data
-  final GuildViewmodel viewModel;
+  final viewModel;
+  final guildName;
 
   @override
-  State<GuildScreen> createState() => _GuildScreenState();
+  ConsumerState<GuildScreen> createState() => _GuildScreenState();
 }
 
-class _GuildScreenState extends State<GuildScreen> {
+class _GuildScreenState extends ConsumerState<GuildScreen> {
   @override
   void initState() {
     super.initState();
@@ -39,6 +38,9 @@ class _GuildScreenState extends State<GuildScreen> {
   //this creates the top navigation pannel
   @override
   Widget build(BuildContext context) {
+
+    final viewModel = GuildViewmodel();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -48,7 +50,7 @@ class _GuildScreenState extends State<GuildScreen> {
             context.pop();
           },
         ),
-        title: Text(widget.title),
+        title: Text(widget.guildName),
         centerTitle: true,
         actions: [
           IconButton(
@@ -65,7 +67,7 @@ class _GuildScreenState extends State<GuildScreen> {
           children: <Widget>[
             Expanded(
               child: ListView(
-                children: widget.viewModel.guildChats.map((chatName) {
+                children: viewModel.guildChats.map((chatName) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16.0,
@@ -74,7 +76,7 @@ class _GuildScreenState extends State<GuildScreen> {
                     child: ListTile(
                       leading: const CircleAvatar(
                         radius: 30,
-                        child: Icon(Icons.group, size: 30),
+                        child: Icon(Icons.forum_rounded, size: 30),
                       ),
                       title: Text(
                         chatName,

@@ -43,6 +43,7 @@ class _FindGuildScreenState extends ConsumerState<FindGuildScreen> {
   void _findGuild() async {
     final searchTerm = _guildNameController.text.trim();
 
+    //check if there is text
     if (searchTerm.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter a guild name.')),
@@ -50,11 +51,13 @@ class _FindGuildScreenState extends ConsumerState<FindGuildScreen> {
       return;
     }
 
+    //get necessary user info
     final authState = ref.read(authNotifierProvider);
     final userProfileState = ref.read(userProfileNotifierProvider);
     final email = authState.email;
     final userGuilds = userProfileState.data?.guilds ?? [];
 
+    //check if user has email
     if (email == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('You must be logged in to join a guild.')),
@@ -62,6 +65,7 @@ class _FindGuildScreenState extends ConsumerState<FindGuildScreen> {
       return;
     }
 
+    //check guilds list to see if input is a guild name
     final guilds = await _guildsFuture;
     Guild? foundGuild;
     try {
@@ -72,6 +76,8 @@ class _FindGuildScreenState extends ConsumerState<FindGuildScreen> {
       foundGuild = null;
     }
 
+    //finalize process by adding user to guild if name is a guild.
+    //adds user to guild user list and adds guild to guilds user list
     if (foundGuild != null) {
       if (userGuilds.contains(foundGuild.guildName)) {
         ScaffoldMessenger.of(context).showSnackBar(
