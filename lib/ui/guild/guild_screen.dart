@@ -56,7 +56,7 @@ class _GuildScreenState extends ConsumerState<GuildScreen> {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              context.push('/guild/update');
+              context.push('/guild/settings/update');
             },
           ),
         ],
@@ -83,8 +83,8 @@ class _GuildScreenState extends ConsumerState<GuildScreen> {
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       onTap: () {
-                        // temporary simple navigation
-                        context.push('/chat/$chatName');
+                        // navigation to specific chat page by guild and chat name
+                        context.push('/chat/${widget.guildName}/$chatName');
                       },
                     ),
                   );

@@ -63,21 +63,22 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => UpdateUserProfileScreen(),
       ),
       GoRoute(
-        path: '/guild/:id',
+        path: '/guild/:guild',
         builder: (context, state) =>
-            GuildScreen(guildName: state.pathParameters['id']!, viewModel: GuildViewmodel()),
+            GuildScreen(guildName: state.pathParameters['guild']!, viewModel: GuildViewmodel()),
       ),
       GoRoute(
-        path: '/chat/:id',
+        path: '/chat/:guild/:chat',
         builder: (context, state) =>
-            ChatScreen(chatName: state.pathParameters['id']!, viewModel: ChatViewmodel()),
+            ChatScreen(guildName: state.pathParameters['guild']!, chatName: state.pathParameters['chat']!,
+             viewModel: ChatViewmodel()),
       ),
       GoRoute(
         path: '/guild/create',
         builder: (context, state) => CreateGuildScreen(), 
       ),
       GoRoute(
-        path: '/guild/update',
+        path: '/guild/settings/update',
         builder: (context, state) => UpdateGuildScreen(title: title),
       ),
       GoRoute(

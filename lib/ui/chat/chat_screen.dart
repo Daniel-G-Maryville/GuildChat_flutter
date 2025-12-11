@@ -6,10 +6,12 @@ class ChatScreen extends StatefulWidget {
   const ChatScreen({
     super.key,
     //title likely to be switched to guild name in future
+    required this.guildName,
     required this.chatName,
     required this.viewModel,
   });
 
+  final String guildName;
   final String chatName;
   //this contains the guild_viewmodel data
   final ChatViewmodel viewModel;
