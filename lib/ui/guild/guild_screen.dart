@@ -84,7 +84,7 @@ class _GuildScreenState extends ConsumerState<GuildScreen> {
                       ),
                       onTap: () {
                         // temporary simple navigation
-                        context.push('/chat');
+                        context.push('/chat/$chatName');
                       },
                     ),
                   );

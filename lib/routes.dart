@@ -68,9 +68,9 @@ final routerProvider = Provider<GoRouter>((ref) {
             GuildScreen(guildName: state.pathParameters['id']!, viewModel: GuildViewmodel()),
       ),
       GoRoute(
-        path: '/chat',
+        path: '/chat/:id',
         builder: (context, state) =>
-            ChatScreen(title: title, viewModel: ChatViewmodel()),
+            ChatScreen(chatName: state.pathParameters['id']!, viewModel: ChatViewmodel()),
       ),
       GoRoute(
         path: '/guild/create',
