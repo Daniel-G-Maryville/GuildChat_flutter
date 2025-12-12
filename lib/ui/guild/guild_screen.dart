@@ -32,7 +32,7 @@ class _GuildScreenState extends ConsumerState<GuildScreen> {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () {
-              context.push('/guild/update');
+              context.push('/guild/settings/update');
             },
           ),
         ],
@@ -43,7 +43,7 @@ class _GuildScreenState extends ConsumerState<GuildScreen> {
           children: <Widget>[
             Expanded(
               child: ListView(
-                children: widget.viewModel.guildChats.map((chatName) {
+                children: viewModel.guildChats.map((chatName) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16.0,
@@ -52,15 +52,15 @@ class _GuildScreenState extends ConsumerState<GuildScreen> {
                     child: ListTile(
                       leading: const CircleAvatar(
                         radius: 30,
-                        child: Icon(Icons.group, size: 30),
+                        child: Icon(Icons.forum_rounded, size: 30),
                       ),
                       title: Text(
                         chatName,
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       onTap: () {
-                        // temporary simple navigation
-                        context.push('/chat');
+                        // navigation to specific chat page by guild and chat name
+                        context.push('/chat/${widget.guildName}/$chatName');
                       },
                     ),
                   );

@@ -6,11 +6,13 @@ class ChatScreen extends StatefulWidget {
   const ChatScreen({
     super.key,
     //title likely to be switched to guild name in future
-    required this.title,
+    required this.guildName,
+    required this.chatName,
     required this.viewModel,
   });
 
-  final String title;
+  final String guildName;
+  final String chatName;
   //this contains the guild_viewmodel data
   final ChatViewmodel viewModel;
 
@@ -48,7 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
             context.pop();
           },
         ),
-        title: Text(widget.title),
+        title: Text(widget.chatName),
         centerTitle: true,
         actions: [
           IconButton(

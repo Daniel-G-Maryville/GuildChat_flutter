@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:guild_chat/models/guild.dart';
+import 'package:guild_chat/data/guild_repository.dart';
+import 'package:guild_chat/data/user_repository.dart';
+import 'package:guild_chat/ui/guild/guild_viewmodel.dart';
+import 'package:guild_chat/ui/login/login_provider.dart';
+import 'package:guild_chat/ui/user_profile/user_profile_provider.dart';
 
-class FindGuildScreen extends StatefulWidget {
+class FindGuildScreen extends ConsumerStatefulWidget {
+
   const FindGuildScreen({
     super.key,
     required this.title,
@@ -10,21 +18,92 @@ class FindGuildScreen extends StatefulWidget {
   final String title;
 
   @override
-  State<FindGuildScreen> createState() => _FindGuildScreenState();
+  ConsumerState<FindGuildScreen> createState() => _FindGuildScreenState();
 }
 
-class _FindGuildScreenState extends State<FindGuildScreen> {
+class _FindGuildScreenState extends ConsumerState<FindGuildScreen> {
+  //this variable is for holding the list of all the guilds
+  late Future<List<Guild>> _guildsFuture;
+  final _guildNameController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
+    _guildsFuture = GuildRepository.getAllguilds();
   }
 
   @override
   void dispose() {
+    _guildNameController.dispose();
     super.dispose();
   }
 
-  final _guildNameController = TextEditingController();
+  //this function is designed to search if the name input is in the guild list
+  //it will then handle the processing after
+  void _findGuild() async {
+    final searchTerm = _guildNameController.text.trim();
+
+    //check if there is text
+    if (searchTerm.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a guild name.')),
+      );
+      return;
+    }
+
+    //get necessary user info
+    final authState = ref.read(authNotifierProvider);
+    final userProfileState = ref.read(userProfileNotifierProvider);
+    final email = authState.email;
+    final userGuilds = userProfileState.data?.guilds ?? [];
+
+    //check if user has email
+    if (email == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('You must be logged in to join a guild.')),
+      );
+      return;
+    }
+
+    //check guilds list to see if input is a guild name
+    final guilds = await _guildsFuture;
+    Guild? foundGuild;
+    try {
+      foundGuild = guilds.firstWhere(
+        (guild) => guild.guildName.toLowerCase() == searchTerm.toLowerCase(),
+      );
+    } catch (e) {
+      foundGuild = null;
+    }
+
+    //finalize process by adding user to guild if name is a guild.
+    //adds user to guild user list and adds guild to guilds user list
+    if (foundGuild != null) {
+      if (userGuilds.contains(foundGuild.guildName)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  'You are already a member of "${foundGuild.guildName}".')),
+        );
+        return;
+      }
+
+      await ref
+          .read(guildNotifierProvider.notifier)
+          .addUser(foundGuild.guildName, email);
+
+      await UserRepository.addGuild(email, foundGuild.guildName);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Successfully joined "${foundGuild.guildName}"!')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Guild "$searchTerm" not found.')),
+      );
+
+    }
+  }
 
   //top navigation pannel construction
   @override
@@ -52,13 +131,8 @@ class _FindGuildScreenState extends State<FindGuildScreen> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                //replace with actual guild finding logic in the future
-              ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Find ${_guildNameController.text} guild')),
-                        );
-              },
-              child: const Text('Find Guild'),
+              onPressed: _findGuild,
+              child: const Text('Find and Join Guild'),
             ),
           ]
         ),
