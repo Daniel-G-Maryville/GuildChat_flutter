@@ -91,7 +91,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                       onTap: () {
                         //temp page switch logic
-                        context.push('/guild');
+                        context.push('/guild/$guildName');
                       },
                     ),
                   );
