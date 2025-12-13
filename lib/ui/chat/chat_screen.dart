@@ -36,7 +36,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     if (text.isNotEmpty) {
       ChatMessageRepository().sendMessage(
         guildName: widget.guildId,
-        username: name!, // Replace with actual username logic
+        username: name, // Replace with actual username logic
         text: text,
         channel: widget.chatName,
       );

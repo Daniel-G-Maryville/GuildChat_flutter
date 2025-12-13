@@ -55,6 +55,11 @@ class _FindGuildScreenState extends ConsumerState<FindGuildScreen> {
     final authState = ref.read(authNotifierProvider);
     final userProfileState = ref.read(userProfileNotifierProvider);
     final email = authState.email;
+    
+    while (userProfileState.data == null) {
+      await Future.delayed(const Duration(milliseconds: 10));
+    }
+
     final userGuilds = userProfileState.data?.guilds ?? [];
 
     //check if user has email
@@ -91,12 +96,20 @@ class _FindGuildScreenState extends ConsumerState<FindGuildScreen> {
       await ref
           .read(guildNotifierProvider.notifier)
           .addUser(foundGuild.guildName, email);
-
-      await UserRepository.addGuild(email, foundGuild.guildName);
+          
+      await ref
+            .read(userProfileNotifierProvider.notifier)
+            .addGuild(foundGuild.guildName);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Successfully joined "${foundGuild.guildName}"!')),
       );
+
+      // Delay the pop to allow the snackbar to be visible before navigating back
+      await Future.delayed(const Duration(seconds: 2));
+      if (context.mounted) {
+        context.pop();
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Guild "$searchTerm" not found.')),
