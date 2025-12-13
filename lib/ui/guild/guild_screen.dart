@@ -78,7 +78,7 @@ class _GuildScreenState extends ConsumerState<GuildScreen> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => ref.refresh(
-                  channelProvider(guildName!),
+                  channelProvider(guildName),
                 ), // Refresh on error
                 child: const Text('Retry'),
               ),

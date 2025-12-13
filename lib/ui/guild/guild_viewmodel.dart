@@ -15,7 +15,7 @@ final channelProvider = FutureProvider.autoDispose.family<List<String>, String>(
     debugPrint('The res object: ${res.toString()}');
     List<String> channels = [];
     for (final item in res) {
-      channels.add(item.channelName);
+      channels.add(item.id);
     }
     return channels;
   },
@@ -48,7 +48,7 @@ class GuildNotifier extends Notifier<DataState<Guild>> {
       );
       if (guild != null) {
         // 1. Create the main chant channel
-        final chatCreated = ref.read(createChatChannelProvider(name));
+        ref.read(createChatChannelProvider(name));
 
         // 2. Add the created guild to the user's profile
         // We use ref.read here because we are calling a method on another provider

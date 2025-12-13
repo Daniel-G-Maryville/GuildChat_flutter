@@ -4,7 +4,7 @@ import 'package:guild_chat/models/chat_channel.dart';
 import 'package:guild_chat/models/chat_message.dart';
 
 class ChatMessageRepository {
-  static const mainChat = 'main_chat';
+  static const mainChat = 'Main Chat';
   static const guilds = 'guilds';
   static const chatChannels = 'chat_channels';
   static const messages = 'messages';
