@@ -1,46 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:guild_chat/data/chat_repository.dart';
 import 'package:guild_chat/ui/chat/chat_viewmodel.dart';
+import 'package:guild_chat/ui/user_profile/user_profile_provider.dart';
 
-class ChatScreen extends StatefulWidget {
-  const ChatScreen({
-    super.key,
-    //title likely to be switched to guild name in future
-    required this.guildName,
-    required this.chatName,
-    required this.viewModel,
-  });
-
-  final String guildName;
+class ChatScreen extends ConsumerStatefulWidget {
+  final String guildId;
   final String chatName;
-  //this contains the guild_viewmodel data
-  final ChatViewmodel viewModel;
+
+  const ChatScreen({super.key, required this.guildId, required this.chatName});
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  ConsumerState<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
-  @override
-  void initState() {
-    super.initState();
-    widget.viewModel.addListener(_updateUI);
-  }
+class _ChatScreenState extends ConsumerState<ChatScreen> {
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void dispose() {
-    widget.viewModel.removeListener(_updateUI);
+    _controller.dispose();
     super.dispose();
   }
 
-  void _updateUI() {
-    if (mounted) {
-      setState(() {});
+  void _sendMessage() async {
+    final text = _controller.text.trim();
+    final userState = ref.watch(userProfileNotifierProvider);
+    final name = userState.data?.username;
+
+    while (name == null) {
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
+
+    if (text.isNotEmpty) {
+      ChatMessageRepository().sendMessage(
+        guildName: widget.guildId,
+        username: name!, // Replace with actual username logic
+        text: text,
+        channel: widget.chatName,
+      );
+      _controller.clear();
     }
   }
-  //top navigation pannel construction
+
   @override
   Widget build(BuildContext context) {
+    final messageStream = ref.watch(chatMessagesProvider((channel: widget.chatName, guildId: widget.guildId)));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -58,42 +64,55 @@ class _ChatScreenState extends State<ChatScreen> {
             onPressed: () {
               //replace with actual navigation logic in the future
               ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Go to chat settings page')),
-                        );
+                SnackBar(content: Text('Go to chat settings page')),
+              );
             },
           ),
         ],
       ),
       //construction of the view of messages to be scrolled through
       body: Column(
-        children: <Widget>[
+        children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: widget.viewModel.chatMessages.length,
-              itemBuilder: (context, index) {
-                final chatMessage = widget.viewModel.chatMessages[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 8.0,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        chatMessage[0], // Name
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16.0, top: 4.0), // Indent the message
-                        child: Text(
-                          chatMessage[1], // Message
-                        ),
-                      ),
-                    ],
-                  ),
+            child: messageStream.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, stack) => Center(child: Text('Error: $error')),
+              data: (messages) {
+                return ListView.builder(
+                  reverse: true,
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    final message = messages[index];
+                    return ListTile(
+                      title: Text(message.username),
+                      subtitle: Text(message.message),
+                    );
+                  },
                 );
               },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    minLines: 1,
+                    maxLines: 5,
+                    keyboardType: TextInputType.multiline,
+                    decoration: const InputDecoration(
+                      hintText: 'Type a message...',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.send),
+                  onPressed: _sendMessage,
+                ),
+              ],
             ),
           ),
         ],

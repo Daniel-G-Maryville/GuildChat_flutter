@@ -18,6 +18,7 @@ class ChatMessageRepository {
     if (text.trim().isEmpty) return;
 
     channel = channel ?? mainChat;
+    channel = nameToId(channel);
 
     final messagesRef = FirebaseFirestore.instance
         .collection(guilds)
@@ -31,10 +32,11 @@ class ChatMessageRepository {
     await messagesRef.add(chat.toMap());
   }
 
-  Stream<List<ChatMessage>> mainChatStream(
+  static Stream<List<ChatMessage>> mainChatStream(
     String guildName, {
     String channel = mainChat,
   }) {
+    channel = nameToId(channel);
     return FirebaseFirestore.instance
         .collection(guilds)
         .doc(guildName)
@@ -69,7 +71,7 @@ class ChatMessageRepository {
           .doc(id)
           .set({
             'created': FieldValue.serverTimestamp(),
-            'displayName': displayName
+            'displayName': displayName,
           }, SetOptions(merge: true));
     } catch (e) {
       debugPrint("Error: $e");
