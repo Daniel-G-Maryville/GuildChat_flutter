@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
+import 'package:guild_chat/models/chat_channel.dart';
 import 'package:guild_chat/models/chat_message.dart';
 
 class ChatMessageRepository {
@@ -30,7 +31,10 @@ class ChatMessageRepository {
     await messagesRef.add(chat.toMap());
   }
 
-  Stream<List<ChatMessage>> mainChatStream(String guildName, {String channel = mainChat}) {
+  Stream<List<ChatMessage>> mainChatStream(
+    String guildName, {
+    String channel = mainChat,
+  }) {
     return FirebaseFirestore.instance
         .collection(guilds)
         .doc(guildName)
@@ -66,5 +70,17 @@ class ChatMessageRepository {
       res = false;
     }
     return res;
+  }
+
+  static Future<List<ChatChannel>> getChatChannels(String guildName) async {
+  final query = await FirebaseFirestore.instance
+    .collection(guilds)
+    .doc(guildName)
+    .collection(chatChannels)
+    .get();
+    
+    return query.docs.map((doc) { 
+      return ChatChannel.fromMap(doc.data(), doc.id);
+    }).toList();
   }
 }

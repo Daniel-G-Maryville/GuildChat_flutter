@@ -1,45 +1,39 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ChatMessage {
-  final String username;
-  final String message;
-  final String id;
+class ChatChannel {
+  final String channelName;
   final Timestamp created;
+  final String id;
 
-  ChatMessage._({
-    required this.username,
-    required this.message,
+  ChatChannel._({
+    required this.channelName,
     required this.created,
-    required this.id,
-  });
+    required this.id}
+  );
 
-  factory ChatMessage.create({
-    required String username,
-    required String message,
+  factory ChatChannel.create({
+    required String channelName,
   }) {
-    return ChatMessage._(
-      username: username,
-      message: message,
+    return ChatChannel._(
+      channelName: channelName,
       created: Timestamp.now(),
       id: '',
     );
   }
 
-  factory ChatMessage.fromMap(Map<String, dynamic> data, String? id) {
-    return ChatMessage._(
-      username: data['username'] ?? '',
-      message: data['message'] ?? '',
+  factory ChatChannel.fromMap(Map<String, dynamic> data, String? id) {
+    return ChatChannel._(
+      channelName: data['guildName'] ?? '',
       created: data['created'] ?? Timestamp.now(),
       id: id ?? '',
     );
   }
 
-  // This is what is sent to firestore, 
+  // This is what is sent to firestore,
   // note, we want the server to timestamp this on creation.
   Map<String, dynamic> toMap() {
     return {
-      'username': username,
-      'message': message,
+      'channelName': channelName,
       'created': FieldValue.serverTimestamp(),
     };
   }

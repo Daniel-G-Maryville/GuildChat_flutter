@@ -3,14 +3,21 @@ import 'package:flutter/foundation.dart';
 import 'package:guild_chat/models/guild.dart';
 import 'package:guild_chat/models/data_state.dart';
 import 'package:guild_chat/data/guild_repository.dart';
+import 'package:guild_chat/data/chat_repository.dart';
 import 'package:guild_chat/ui/chat/chat_viewmodel.dart';
 import 'package:guild_chat/ui/user_profile/user_profile_provider.dart';
 
 //added guildViewModelProvider to allow functionality for creating guild
 
-final channelProvider = FutureProvider.autoDispose.family<String, String>(
-  (guildName, channel) {
-    
+final channelProvider = FutureProvider.autoDispose.family<List<String>, String>(
+  (ref, guildName) async {
+    final res = await ChatMessageRepository.getChatChannels(guildName);
+    debugPrint('The res object: ${res.toString()}');
+    List<String> channels = [];
+    for (final item in res) {
+      channels.add(item.channelName);
+    }
+    return channels;
   },
 );
 
