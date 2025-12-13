@@ -24,10 +24,14 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     super.dispose();
   }
 
-  void _sendMessage() {
+  void _sendMessage() async {
     final text = _controller.text.trim();
     final userState = ref.watch(userProfileNotifierProvider);
     final name = userState.data?.username;
+
+    while (name == null) {
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
 
     if (text.isNotEmpty) {
       ChatMessageRepository().sendMessage(
