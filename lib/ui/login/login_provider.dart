@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:guild_chat/models/auth_state.dart'; // Use package import!
@@ -21,6 +22,8 @@ class AuthService {
 
   Future<void> checkSession() async {
     final user = _auth.currentUser;
+
+    debugPrint("Do we ever get here?");
     if (user != null) {
       try {
         await user.getIdToken(true); // Force refresh
@@ -87,7 +90,6 @@ class AuthStateNotifier extends Notifier<AuthState> {
 
   void clearError() => state = state.copyWith(error: null);
 }
-
 
 final authServiceProvider = Provider<AuthService>((ref) => AuthService());
 final authStreamProvider = StreamProvider<User?>((ref) {

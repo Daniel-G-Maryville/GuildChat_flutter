@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:guild_chat/models/guild.dart';
 import 'package:guild_chat/data/guild_repository.dart';
 import 'package:guild_chat/ui/guild/guild_viewmodel.dart';
-import 'package:guild_chat/ui/login/login_provider.dart';
 import 'package:guild_chat/ui/user_profile/user_profile_provider.dart';
 
 class FindGuildScreen extends ConsumerStatefulWidget {
