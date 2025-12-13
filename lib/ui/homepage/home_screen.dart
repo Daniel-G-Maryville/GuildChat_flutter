@@ -5,6 +5,7 @@ import 'package:guild_chat/ui/login/login_provider.dart';
 import 'package:guild_chat/ui/homepage/home_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
+
   const HomeScreen({super.key});
 
   @override
@@ -15,7 +16,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    // Make sure the user is logged 
+    // Make sure the user is logged
     ref.read(authServiceProvider).checkSession();
 
     // Get the home screen provider
@@ -48,55 +49,56 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           //this segment displays the guilds with functionality to bring the users to that guilds page
           children: <Widget>[
             Expanded(
-              child: guilds.isEmpty 
-              ? Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.group_add,
-                        size: 80,
-                        color: Colors.grey[600],
-                      ),
-                      const SizedBox(height: 24),
-                      Text(
-                        "You haven't joined a guild yet!\n\nClick Find Guild or Create Guild below.",
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Colors.grey[700],
-                          height: 1.4,
+              child: guilds.isEmpty
+                  ? Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.group_add,
+                              size: 80,
+                              color: Colors.grey[600],
+                            ),
+                            const SizedBox(height: 24),
+                            Text(
+                              "You haven't joined a guild yet!\n\nClick Find Guild or Create Guild below.",
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.titleLarge
+                                  ?.copyWith(
+                                    color: Colors.grey[700],
+                                    height: 1.4,
+                                  ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              )
-              : ListView(
-                children: guilds.map((guildName) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 8.0,
+                    )
+                  : ListView(
+                      children: guilds.map((guildName) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 8.0,
+                          ),
+                          child: ListTile(
+                            leading: const CircleAvatar(
+                              radius: 30,
+                              child: Icon(Icons.group, size: 30),
+                            ),
+                            title: Text(
+                              guildName,
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            ),
+                            onTap: () {
+                              //temp page switch logic
+                              context.push('/guild/$guildName');
+                            },
+                          ),
+                        );
+                      }).toList(),
                     ),
-                    child: ListTile(
-                      leading: const CircleAvatar(
-                        radius: 30,
-                        child: Icon(Icons.group, size: 30),
-                      ),
-                      title: Text(
-                        guildName,
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      onTap: () {
-                        //temp page switch logic
-                        context.push('/guild/$guildName');
-                      },
-                    ),
-                  );
-                }).toList(),
-              ),
             ),
           ],
         ),

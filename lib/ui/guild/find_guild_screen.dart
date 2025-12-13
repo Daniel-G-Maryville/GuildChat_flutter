@@ -51,9 +51,8 @@ class _FindGuildScreenState extends ConsumerState<FindGuildScreen> {
     }
 
     //get necessary user info
-    final authState = ref.read(authNotifierProvider);
     final userProfileState = ref.read(userProfileNotifierProvider);
-    final email = authState.email;
+    final email = userProfileState.data?.email;
     
     while (userProfileState.data == null) {
       await Future.delayed(const Duration(milliseconds: 10));
