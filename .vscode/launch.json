@@ -16,7 +16,15 @@
             "flutterMode": "profile"
         },
         {
-            "name": "GuildChat_flutter (release mode)",
+            "name": "GuildChat_flutter (User A)",
+            "emulatorId": "Medium_Phone_35",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "GuildChat_flutter (User B)",
+            "emulatorId": "Medium_Phone_35_2",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
