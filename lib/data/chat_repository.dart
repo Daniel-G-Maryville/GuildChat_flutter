@@ -73,13 +73,14 @@ class ChatMessageRepository {
   }
 
   static Future<List<ChatChannel>> getChatChannels(String guildName) async {
-  final query = await FirebaseFirestore.instance
-    .collection(guilds)
-    .doc(guildName)
-    .collection(chatChannels)
-    .get();
-    
-    return query.docs.map((doc) { 
+    final query = await FirebaseFirestore.instance
+        .collection(guilds)
+        .doc(guildName)
+        .collection(chatChannels)
+        .get();
+
+    return query.docs.map((doc) {
+      debugPrint("firestore doc:  ${doc.id}");
       return ChatChannel.fromMap(doc.data(), doc.id);
     }).toList();
   }
