@@ -1,30 +1,37 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:guild_chat/data/chat_repository.dart';
+import 'package:guild_chat/models/chat_message.dart';
 
-final createChatChannelProvider = FutureProvider.autoDispose.family<bool, String>(
-  (ref, displayName) async {
-  final chatRepo = ChatMessageRepository();
-  return await chatRepo.createChannel(displayName);
-});
+final createChatChannelProvider = FutureProvider.autoDispose
+    .family<bool, String>((ref, displayName) async {
+      final chatRepo = ChatMessageRepository();
+      return await chatRepo.createChannel(displayName);
+    });
 
-class ChatViewmodel extends ChangeNotifier {
-  // A mock list of messages in the chat
-  // Later, this would be fetched from your database.
-  final List<List<String>> _chatMessages = [
-    ['Jeff', 'Did you see the planned event?'],
-    ['Terry', 'No, where did you send it?'],
-    ['Carl', 'Yea, the one you sent in the group text right?'],
-    ['Jeff', 'Oh, right I forgot Terry is not in that group text'],
-    ['Jeff', 'I will make sure to post event updates in here in the future'],
-  ];
+class ChatMessageNotifier extends StreamNotifier<List<ChatMessage>> {
+  final String guildName;
+  final String channel;
 
-  List<List<String>> get chatMessages => List.unmodifiable(_chatMessages);
+  ChatMessageNotifier({
+    required this.guildName,
+    this.channel = ChatMessageRepository.mainChat,
+  });
 
-  // Example method to update messages (e.g., from DB)
-  Future<void> loadMessages() async {
-    // Simulate fetching from DB
-    // _chatMessages = await fetchMessagesFromDB();
-    notifyListeners();
+  @override
+  Stream<List<ChatMessage>> build() {
+    return ChatMessageRepository.mainChatStream(
+      guildName,
+      channel: channel,
+    );
   }
 }
+
+final chatMessagesProvider = StreamNotifierProvider.family<
+    ChatMessageNotifier,
+    List<ChatMessage>,
+    ({String guildId, String channel})>((params) {
+  return ChatMessageNotifier(
+    guildName: params.guildId,
+    channel: params.channel,
+  );
+});
