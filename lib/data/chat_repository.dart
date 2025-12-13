@@ -51,19 +51,25 @@ class ChatMessageRepository {
         );
   }
 
+  static String nameToId(String name) {
+    return name.toLowerCase().replaceAll(RegExp(' '), '_');
+  }
+
   Future<bool> createChannel(
     String guildName, {
-    String? channelName = mainChat,
+    String? displayName = mainChat,
   }) async {
     bool res = true;
+    String id = nameToId(displayName!);
     try {
       await FirebaseFirestore.instance
           .collection(guilds)
           .doc(guildName)
           .collection(chatChannels)
-          .doc(channelName)
+          .doc(id)
           .set({
             'created': FieldValue.serverTimestamp(),
+            'displayName': displayName
           }, SetOptions(merge: true));
     } catch (e) {
       debugPrint("Error: $e");

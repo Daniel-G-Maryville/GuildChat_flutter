@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:guild_chat/data/chat_repository.dart';
 
 final createChatChannelProvider = FutureProvider.autoDispose.family<bool, String>(
-  (ref, guildName) async {
+  (ref, displayName) async {
   final chatRepo = ChatMessageRepository();
-  return await chatRepo.createChannel(guildName);
+  return await chatRepo.createChannel(displayName);
 });
 
 class ChatViewmodel extends ChangeNotifier {
