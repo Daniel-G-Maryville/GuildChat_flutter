@@ -3,29 +3,23 @@ import 'package:flutter/foundation.dart';
 import 'package:guild_chat/models/guild.dart';
 import 'package:guild_chat/models/data_state.dart';
 import 'package:guild_chat/data/guild_repository.dart';
+import 'package:guild_chat/data/chat_repository.dart';
 import 'package:guild_chat/ui/chat/chat_viewmodel.dart';
 import 'package:guild_chat/ui/user_profile/user_profile_provider.dart';
 
-class GuildViewmodel extends ChangeNotifier {
-  // A mock list of chats in the guild
-  // Later, this would be fetched from your database.
-  final List<String> _guildChats = [
-    'main_chat'
-  ];
-
-  List<String> get guildChats => List.unmodifiable(_guildChats);
-
-  // Example method to update guilds (e.g., from DB)
-  Future<void> loadChats() async {
-    // Simulate fetching from DB
-    // _guildChats = await fetchChatsFromDB();
-    notifyListeners();
-  }
-}
-
 //added guildViewModelProvider to allow functionality for creating guild
-final guildViewModelProvider =
-    NotifierProvider<GuildNotifier, DataState<Guild>>(GuildNotifier.new);
+
+final channelProvider = FutureProvider.autoDispose.family<List<String>, String>(
+  (ref, guildName) async {
+    final res = await ChatMessageRepository.getChatChannels(guildName);
+    debugPrint('The res object: ${res.toString()}');
+    List<String> channels = [];
+    for (final item in res) {
+      channels.add(item.displayName);
+    }
+    return channels;
+  },
+);
 
 // I"m going to try to comment the shit out of this.
 // This is the guild notifier class. Notifiers are a
@@ -54,7 +48,7 @@ class GuildNotifier extends Notifier<DataState<Guild>> {
       );
       if (guild != null) {
         // 1. Create the main chant channel
-        final chatCreated = ref.read(createChatChannelProvider(name));
+        ref.read(createChatChannelProvider(name));
 
         // 2. Add the created guild to the user's profile
         // We use ref.read here because we are calling a method on another provider
@@ -80,7 +74,6 @@ class GuildNotifier extends Notifier<DataState<Guild>> {
     }
   }
 
-  // TODO write an add user function
   // This will add a user to the list of users that subscribe to the guild
   Future<void> addUser(String guildName, String userId) async {
     try {

@@ -27,6 +27,7 @@ class _UpdateGuildScreenState extends State<UpdateGuildScreen> {
   //top navigation pannel construction
   @override
   Widget build(BuildContext context) {
+    debugPrint("In the create find  screen.");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,

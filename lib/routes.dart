@@ -7,7 +7,6 @@ import 'package:guild_chat/ui/login/login_screen.dart';
 import 'package:guild_chat/ui/user_profile/create_user_profile_screen.dart';
 import 'package:guild_chat/ui/core/widgets/splash_screen.dart';
 import 'package:guild_chat/ui/user_profile/update_user_profile_screen.dart';
-import 'package:guild_chat/ui/guild/guild_viewmodel.dart';
 import 'package:guild_chat/ui/guild/guild_screen.dart';
 import 'package:guild_chat/ui/chat/chat_screen.dart';
 import 'package:guild_chat/ui/chat/chat_viewmodel.dart';
@@ -63,19 +62,16 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => UpdateUserProfileScreen(),
       ),
       GoRoute(
-        path: '/guild/:guild',
-        builder: (context, state) =>
-            GuildScreen(guildName: state.pathParameters['guild']!, viewModel: GuildViewmodel()),
-      ),
-      GoRoute(
         path: '/chat/:guild/:chat',
-        builder: (context, state) =>
-            ChatScreen(guildName: state.pathParameters['guild']!, chatName: state.pathParameters['chat']!,
-             viewModel: ChatViewmodel()),
+        builder: (context, state) => ChatScreen(
+          guildName: state.pathParameters['guild']!,
+          chatName: state.pathParameters['chat']!,
+          viewModel: ChatViewmodel(),
+        ),
       ),
       GoRoute(
         path: '/guild/create',
-        builder: (context, state) => CreateGuildScreen(), 
+        builder: (context, state) => CreateGuildScreen(),
       ),
       GoRoute(
         path: '/guild/settings/update',
@@ -84,6 +80,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/guild/find',
         builder: (context, state) => FindGuildScreen(title: title),
+      ),
+      GoRoute(
+        path: '/guild/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id'];
+          return GuildScreen(id: id!);
+        },
       ),
     ],
   );

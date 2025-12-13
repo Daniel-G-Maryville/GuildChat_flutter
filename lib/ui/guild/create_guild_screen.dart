@@ -22,8 +22,7 @@ class CreateGuildScreen extends ConsumerStatefulWidget {
 // ref.read() function. From there we can callback to the Notifier, in
 // our case we are going to call the create method
 class _CreateGuildScreenState extends ConsumerState<CreateGuildScreen> {
-  final _title =
-      "Create Guild"; // Here we just moved this to here so we aren't having to set that elsewhere
+  final _title = "Create Guild";
   final _guildNameController = TextEditingController();
   final _guildDescriptionController = TextEditingController();
 
@@ -48,6 +47,7 @@ class _CreateGuildScreenState extends ConsumerState<CreateGuildScreen> {
   //top navigation pannel construction
   @override
   Widget build(BuildContext context) {
+    debugPrint("In the create guild screen.");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
