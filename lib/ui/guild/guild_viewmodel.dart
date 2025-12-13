@@ -15,7 +15,7 @@ final channelProvider = FutureProvider.autoDispose.family<List<String>, String>(
     debugPrint('The res object: ${res.toString()}');
     List<String> channels = [];
     for (final item in res) {
-      channels.add(item.id);
+      channels.add(item.displayName);
     }
     return channels;
   },

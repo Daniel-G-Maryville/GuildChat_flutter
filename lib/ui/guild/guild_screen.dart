@@ -4,9 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:guild_chat/ui/guild/guild_viewmodel.dart';
 
 class GuildScreen extends ConsumerStatefulWidget {
-  final String guildName;
+  final String id;
 
-  const GuildScreen({super.key, required this.guildName});
+  const GuildScreen({super.key, required this.id});
 
   @override
   ConsumerState<GuildScreen> createState() => _GuildScreenState();
@@ -15,8 +15,9 @@ class GuildScreen extends ConsumerStatefulWidget {
 class _GuildScreenState extends ConsumerState<GuildScreen> {
   @override
   Widget build(BuildContext context) {
-    final guildName = widget.guildName;
+    final guildName = widget.id;
     final channels = ref.watch(channelProvider(guildName));
+    debugPrint("In the guild/:id screen");
 
     debugPrint(channels.toString());
 
@@ -77,9 +78,8 @@ class _GuildScreenState extends ConsumerState<GuildScreen> {
               Text('Error loading channels: $error'),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () => ref.refresh(
-                  channelProvider(guildName),
-                ), // Refresh on error
+                onPressed: () =>
+                    ref.refresh(channelProvider(guildName)), // Refresh on error
                 child: const Text('Retry'),
               ),
             ],
